@@ -1,49 +1,55 @@
-import { Button, OutlineButton } from "@ui/buttons";
+"use client";
+
+import { Button } from "@ui/buttons";
 import Logo from "@components/logo";
-import Divider from "@ui/divider";
 import {
-  AlertTriangleIcon,
-  HelpCircleIcon,
-  LogInIcon,
-  ThumbsUpIcon,
+  BlocksIcon,
+  InfoIcon,
 } from "lucide-react";
-import PrivkeyInput from "./privkey-input";
-import DangerWrapper from "@/ui/danger-wrapper";
+import { useState } from "react";
 
 export default function Login() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function loginWithExtension() {
+    setIsLoading(true);
+    // try {
+    //   const { webln, nostr } = await getProviders();
+    //   // Enabling the lightning network
+    //   if (!webln.enabled) {
+    //     await webln.enable();
+    //     console.debug("webln enabled!!");
+    //   }
+    //   // Get publicKey
+    //   const publickey = await nostr.getPublicKey();
+    //   console.debug("public key:", publickey);
+    //
+    //   await retrieveProfile(publickey);
+    // } catch (error) {
+    //   // TODO: handle error properly
+    //   console.error("There was an error while loggin in -> ", error);
+    //   throw error;
+    // } finally {
+    //   setIsLoading(false);
+    // }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }
   return (
-    <div className="flex flex-col gap-10 p-6 max-w-md mx-auto">
-      <Logo />
+    <div className="flex flex-col gap-8 p-6 max-w-md mx-auto">
+      <Logo isLink={false} />
 
-      <div className="space-y-4">
-        <div className="bg-success/5 border-1 border-success px-6 py-2 rounded flex gap-2 items-center text-success">
-          <ThumbsUpIcon className="w-5 h-5" />
+      <div className="rounded flex gap-2 items-center text-discreetText bg-surface2 p-2 justify-center">
+        <InfoIcon className="w-5 h-5 text-info" />
 
-          <h1 className="font-bold">Recomended</h1>
-        </div>
-
-        <Button variant="primary" className="w-full">
-          Login with extension
-          <HelpCircleIcon className="w-5 h-5 justify-self-end" />
-        </Button>
+        <p className="font-bold text-xs">More ways to login comming soon!</p>
       </div>
-      <Divider />
 
-      <form className="flex flex-col">
-        <DangerWrapper className="mb-2 relative">
-          <div className="flex gap-2 py-2 px-4 justify-between items-center">
-            <AlertTriangleIcon className="w-6 h-6 fill-warn text-black" />
-            <h4 className="grow font-bold">Login with private key</h4>
-          </div>
-        </DangerWrapper>
-        <PrivkeyInput></PrivkeyInput>
-        <Button 
-          className="w-full bg-surface2"
-          type="submit">
-          <LogInIcon />
-          Login
-        </Button>
-      </form>
+      <Button variant="primary" className="w-full">
+        <BlocksIcon className="w-5 h-5" />
+        Login with extension
+      </Button>
     </div>
   );
 }
