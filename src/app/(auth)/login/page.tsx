@@ -1,9 +1,6 @@
 import Login from "@/components/login";
 import React from "react";
 
-export default function Page() {
-  return (
-      <Login />
-  );
+export default async function Page() {
+  return <Login />;
 }
-

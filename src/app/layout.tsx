@@ -2,7 +2,7 @@ import { twJoin } from "tailwind-merge";
 import { josefinSans } from "@/utils/fonts";
 
 import "@app/globals.css";
-import { ThemeProvider } from "@/providers/theme";
+import Providers from "@/providers";
 
 export default function RootLayout({
   children,
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body id="root" className="body-gradient2 antialiased">
-        <ThemeProvider defaultTheme="system" attribute="class">
+        <Providers>
           <main
             className={twJoin(
               "text-textColor",
@@ -28,7 +28,7 @@ export default function RootLayout({
             </Container>
           </main>
           <div id="modal-root" />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -1,8 +1,10 @@
 "use server";
 
 import { kinds } from "nostr-tools";
-import { DEFAULT_RELAYS, pool } from "../nostr";
-import { cookies } from "next/headers";
+import { DEFAULT_RELAYS, pool } from "@utils/nostr";
+import { setSession, EXPECTANCY } from "@utils/session";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export type Profile = {
   relay: string;
@@ -19,7 +21,7 @@ export type Profile = {
   publickey?: string;
 };
 
-export async function retrieveProfile(publickey: string) {
+export async function loginWithExt(publickey: string) {
   const profiles: Profile[] = [];
 
   // TODO: get cookie with prefered relays.
@@ -51,9 +53,13 @@ export async function retrieveProfile(publickey: string) {
     // TODO: handle error properly
     console.error("There was an error while loggin in -> ", error);
   } finally {
-    // TODO: use next-auth to store the profiles object here
-    const cookieStore = cookies();
-    cookieStore.set("profiles", JSON.stringify(profiles));
-    return profiles;
+    await setSession(profiles, EXPECTANCY.short);
+    revalidatePath("/");
+    redirect("/");
   }
+}
+
+export async function logout() {
+  await setSession(null, EXPECTANCY.logout);
+  revalidatePath("/");
 }
