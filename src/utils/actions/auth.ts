@@ -23,9 +23,7 @@ export type Profile = {
 
 export async function loginWithExt(publickey: string) {
   const profiles: Profile[] = [];
-
-  // TODO: get cookie with prefered relays.
-  // or maybe use sql to store.
+  let redirectPath: string | null = null;
   try {
     for (const relay of DEFAULT_RELAYS) {
       const filter = {
@@ -49,13 +47,19 @@ export async function loginWithExt(publickey: string) {
       };
       profiles.push(profile);
     }
-  } catch (error) {
-    // TODO: handle error properly
-    console.error("There was an error while loggin in -> ", error);
-  } finally {
+
     await setSession(profiles, EXPECTANCY.short);
     revalidatePath("/login");
-    redirect("/");
+    redirectPath = "/";
+  } catch (error) {
+    // TODO: handle error properly
+    // TODO: log error on some service or db (like firebase).
+    console.error("There was an error while loggin in -> ", error);
+    throw error;
+  } finally {
+    if (redirectPath) {
+      redirect(redirectPath);
+    }
   }
 }
 

@@ -36,7 +36,7 @@ export default async function Navbar() {
         </div>
 
         <div className="hidden gap-4 justify-center items-center lg:flex">
-          {!session ? <Login /> : <Accounts profiles={session} />}
+          {!session ? <LoginBtn /> : <Accounts profiles={session} />}
           <Divider vertical />
 
           <DesktopDrawer />
@@ -46,7 +46,7 @@ export default async function Navbar() {
   );
 }
 
-function Login() {
+function LoginBtn() {
   return (
     <Link href="/login">
       <OutlineButton variant="primary" className="flex -space-x-4">

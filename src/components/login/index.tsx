@@ -2,16 +2,14 @@
 
 import { Button } from "@ui/buttons";
 import Logo from "@components/logo";
-import { BlocksIcon, InfoIcon } from "lucide-react";
+import { BlocksIcon, InfoIcon, Loader2 } from "lucide-react";
 import { useContext, useState } from "react";
 import { nostrCtx } from "@/providers/nostr-provider";
 import { loginWithExt } from "@/utils/actions/auth";
-import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const providers = useContext(nostrCtx);
-  const router = useRouter();
 
   async function handleLogin() {
     setIsLoading(true);
@@ -26,10 +24,8 @@ export default function Login() {
       // TODO: handle error properly
       console.error("There was an error while loggin in -> ", error);
       throw error;
-    } finally {
-      setIsLoading(false);
-      router.back();
     }
+    setIsLoading(false);
   }
 
   return (
@@ -50,8 +46,13 @@ export default function Login() {
           className="w-full"
           disabled={isLoading}
         >
-          <BlocksIcon className="w-5 h-5 justify-self-end" />
-          Login with extension
+          {isLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <BlocksIcon className="w-5 h-5 justify-self-end" />
+          )}
+
+          {isLoading ? "Logging in..." : "Login with extension"}
         </Button>
       </div>
     </form>

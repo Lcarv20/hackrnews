@@ -74,7 +74,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={twMerge(
           twJoin(
             "block py-2 px-3 rounded cursor-pointer",
-            "text-neutral-950",
+            "text-neutral-950 disabled:opacity-40 disabled:cursor-not-allowed",
             "text-sm font-semibold",
             "transition ease-out",
             "inline-flex justify-center items-center gap-2",
