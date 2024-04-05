@@ -16,7 +16,6 @@ import { getSession } from "@/utils/session";
 export default async function Navbar() {
   const isPinned = cookies().get("pinned")?.value === "true" ?? false;
   const session = await getSession();
-  console.log(session);
 
   return (
     <>
@@ -38,8 +37,6 @@ export default async function Navbar() {
 
         <div className="hidden gap-4 justify-center items-center lg:flex">
           {!session ? <Login /> : <Accounts profiles={session} />}
-
-          {/* <Accounts profiles={profilesVal} /> */}
           <Divider vertical />
 
           <DesktopDrawer />

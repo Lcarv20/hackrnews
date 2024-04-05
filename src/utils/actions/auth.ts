@@ -3,7 +3,7 @@
 import { kinds } from "nostr-tools";
 import { DEFAULT_RELAYS, pool } from "@utils/nostr";
 import { setSession, EXPECTANCY } from "@utils/session";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type Profile = {
@@ -54,7 +54,7 @@ export async function loginWithExt(publickey: string) {
     console.error("There was an error while loggin in -> ", error);
   } finally {
     await setSession(profiles, EXPECTANCY.short);
-    revalidatePath("/");
+    revalidatePath("/login");
     redirect("/");
   }
 }
