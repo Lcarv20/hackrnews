@@ -6,10 +6,16 @@ import { BlocksIcon, InfoIcon, Loader2 } from "lucide-react";
 import { useContext, useState } from "react";
 import { nostrCtx } from "@/providers/nostr-provider";
 import { loginWithExt } from "@/utils/actions/auth";
+import Checkbox from "@/ui/checkbox";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export default function Login() {
+export default function Login({ isModal = false }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState<any | null>(null);
   const providers = useContext(nostrCtx);
+  const router = useRouter();
 
   async function handleLogin() {
     setIsLoading(true);
@@ -19,13 +25,20 @@ export default function Login() {
     }
     try {
       const publickey = await providers.nostr.getPublicKey();
-      await loginWithExt(publickey);
+      await loginWithExt(publickey, rememberMe);
     } catch (error) {
-      // TODO: handle error properly
-      console.error("There was an error while loggin in -> ", error);
-      throw error;
+      // TODO: submit error to some logger later
+      setError(error);
+      toast.error("Login failed, try again");
+    } finally {
+      if (!error) {
+        toast.success("Logged in successfully!");
+        if (isModal) {
+          router.back();
+          setIsLoading(false);
+        }
+      }
     }
-    setIsLoading(false);
   }
 
   return (
@@ -35,7 +48,7 @@ export default function Login() {
           <Logo isLink={false} />
         </div>
 
-        <div className="rounded flex gap-2 py-3 items-center text-discreetText justify-center bg-surface1">
+        <div className="rounded flex gap-2 py-3 items-center text-subText justify-center bg-surface1">
           <InfoIcon className="w-4 h-4 text-info" />
           <p className="text-xs">More options coming soon</p>
         </div>
@@ -54,6 +67,22 @@ export default function Login() {
 
           {isLoading ? "Logging in..." : "Login with extension"}
         </Button>
+
+        <div className="flex items-center gap-2 justify-end">
+          <label
+            htmlFor="rememberMe"
+            className="text-xs cursor-pointer text-subText"
+          >
+            Remember me
+          </label>
+          <Checkbox
+            id="rememberMe"
+            checked={rememberMe}
+            onCheckedChange={(e) => {
+              setRememberMe(e.valueOf() as boolean);
+            }}
+          />
+        </div>
       </div>
     </form>
   );

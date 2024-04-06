@@ -5,7 +5,7 @@ import Login from "@/components/login";
 export default async function Page() {
   return (
     <Modal>
-      <Login></Login>
+      <Login isModal></Login>
     </Modal>
   );
 }

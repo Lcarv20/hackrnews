@@ -3,6 +3,7 @@ import { josefinSans } from "@/utils/fonts";
 
 import "@app/globals.css";
 import Providers from "@/providers";
+import { Toaster } from "@/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -28,6 +29,9 @@ export default function RootLayout({
             </Container>
           </main>
           <div id="modal-root" />
+          <Toaster
+
+          />
         </Providers>
       </body>
     </html>
