@@ -7,9 +7,9 @@ import { logout } from "@/utils/actions/auth";
 export default function Accounts({ profiles }: { profiles: Profile[] }) {
   return (
     <Button
-      onClick={async function () {
-        await logout();
-      }}
+      // onClick={async function () {
+      //   await logout();
+      // }}
       variant="ghost"
       className="flex -space-x-4"
     >

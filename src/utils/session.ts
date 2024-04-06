@@ -6,33 +6,33 @@ import { Profile } from "./actions/auth";
 const jwtSecret = "secret";
 const key = new TextEncoder().encode(jwtSecret);
 
-export const EXPECTANCY = {
+export const SESSION_DURATION = {
   short: 60 * 60 * 1000,
   long: 30 * 24 * 60 * 60 * 1000,
   logout: 0,
-};
+} as const;
 
 export async function setSession(
   user: Profile[] | null,
-  span = EXPECTANCY.short,
+  span = SESSION_DURATION.short,
 ) {
   let expires: Date;
   switch (span) {
-    case EXPECTANCY.short:
+    case SESSION_DURATION.short:
       // 1 hour
-      cookies().set("rememberMe", "false", { maxAge: EXPECTANCY.short });
-      expires = new Date(Date.now() + EXPECTANCY.short);
+      cookies().set("rememberMe", "false", { maxAge: SESSION_DURATION.short });
+      expires = new Date(Date.now() + SESSION_DURATION.short);
       break;
-    case EXPECTANCY.long:
+    case SESSION_DURATION.long:
       // 30 days
-      cookies().set("rememberMe", "true", { maxAge: EXPECTANCY.long });
-      expires = new Date(Date.now() + EXPECTANCY.long);
+      cookies().set("rememberMe", "true", { maxAge: SESSION_DURATION.long });
+      expires = new Date(Date.now() + SESSION_DURATION.long);
       break;
-    case EXPECTANCY.logout:
-      expires = new Date(Date.now() + EXPECTANCY.logout);
+    case SESSION_DURATION.logout:
+      expires = new Date(Date.now() + SESSION_DURATION.logout);
       break;
     default:
-      expires = new Date(Date.now() + EXPECTANCY.short);
+      expires = new Date(Date.now() + SESSION_DURATION.short);
   }
 
   const session = await encrypt({ profiles: user, expires });
@@ -54,12 +54,10 @@ export async function updateSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return;
 
-  // No need to extend if the session is long
-  const rememberMe = request.cookies.get("rememberMe")?.value;
-  if (rememberMe === "true") return;
-
+  const rememberMe = cookies().get("rememberMe")?.value === "true";
+  const duration = rememberMe ? SESSION_DURATION.long : SESSION_DURATION.short;
   const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + EXPECTANCY.short);
+  parsed.expires = new Date(Date.now() + duration);
 
   const res = NextResponse.next();
   res.cookies.set({

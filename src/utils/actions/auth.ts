@@ -2,9 +2,10 @@
 
 import { kinds } from "nostr-tools";
 import { DEFAULT_RELAYS, pool } from "@utils/nostr";
-import { setSession, EXPECTANCY } from "@utils/session";
+import { setSession, SESSION_DURATION } from "@utils/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export type Profile = {
   relay: string;
@@ -21,9 +22,17 @@ export type Profile = {
   publickey?: string;
 };
 
-export async function loginWithExt(publickey: string) {
+export async function loginWithExt(publickey: string, rememberMe = false) {
   const profiles: Profile[] = [];
   let redirectPath: string | null = null;
+  const tokenDuration = rememberMe
+    ? SESSION_DURATION.long
+    : SESSION_DURATION.short;
+
+  if (rememberMe) {
+    cookies().set("rememberMe", "true", { maxAge: SESSION_DURATION.long });
+  }
+
   try {
     for (const relay of DEFAULT_RELAYS) {
       const filter = {
@@ -48,7 +57,7 @@ export async function loginWithExt(publickey: string) {
       profiles.push(profile);
     }
 
-    await setSession(profiles, EXPECTANCY.short);
+    await setSession(profiles, tokenDuration);
     revalidatePath("/login");
     redirectPath = "/";
   } catch (error) {
@@ -64,6 +73,7 @@ export async function loginWithExt(publickey: string) {
 }
 
 export async function logout() {
-  await setSession(null, EXPECTANCY.logout);
+  await setSession(null, SESSION_DURATION.logout);
   revalidatePath("/");
 }
+
