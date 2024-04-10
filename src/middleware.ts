@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, updateSession } from "@/utils/session";
+import { InvalidSessionError } from "./utils/exceptions";
 
 export async function middleware(request: NextRequest) {
-  await updateSession(request);
   const session = await getSession();
 
   if (request.nextUrl.pathname === "/login" && session) {
@@ -13,5 +13,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return NextResponse.next();
+  try {
+    return await updateSession(request);
+  } catch (e) {
+    const res = NextResponse.next();
+    const { name, message } = e as Error & { name: string; message: string };
+    res.headers.set(
+      InvalidSessionError.name,
+      JSON.stringify({
+        name,
+        message,
+      }),
+    );
+    return res;
+  }
 }
