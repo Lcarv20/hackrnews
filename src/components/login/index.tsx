@@ -3,8 +3,8 @@
 import { Button } from "@ui/buttons";
 import Logo from "@components/logo";
 import { BlocksIcon, InfoIcon, Loader2 } from "lucide-react";
-import { useContext, useState } from "react";
-import { nostrCtx } from "@/providers/nostr-provider";
+import { useState } from "react";
+import { NostrService, useNostr } from "@/utils/hooks/use-nostr";
 import { loginWithExt } from "@/utils/actions/auth";
 import Checkbox from "@/ui/checkbox";
 import { useRouter } from "next/navigation";
@@ -13,31 +13,32 @@ import { toast } from "sonner";
 export default function Login({ isModal = false }) {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState<any | null>(null);
-  const providers = useContext(nostrCtx);
+  const nostr = useNostr();
   const router = useRouter();
 
   async function handleLogin() {
     setIsLoading(true);
-    if (!providers?.webln || !providers?.nostr) {
-      alert("Oops, it seems you don't have an extension compatible with Nostr");
+    // this check is redundant because the button is disabled, bun in case users try to tweak with
+    // the input in the developer console
+    if (!nostr) {
+      console.error("Nostr extension not found");
+      toast.error("Nostr extension not found");
+      setIsLoading(false);
       return;
     }
+
     try {
-      const publickey = await providers.nostr.getPublicKey();
+      const publickey = await nostr.getPublicKey();
       await loginWithExt(publickey, rememberMe);
+
+      toast.success("Logged in successfully!");
     } catch (error) {
-      // TODO: submit error to some logger later
-      setError(error);
       toast.error("Login failed, try again");
     } finally {
-      if (!error) {
-        toast.success("Logged in successfully!");
-        if (isModal) {
-          router.back();
-          setIsLoading(false);
-        }
+      if (isModal) {
+        router.back();
       }
+      setIsLoading(false);
     }
   }
 
@@ -57,7 +58,7 @@ export default function Login({ isModal = false }) {
           onClick={handleLogin}
           variant="primary"
           className="w-full"
-          disabled={isLoading}
+          disabled={isLoading || !nostr}
         >
           {isLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -76,14 +77,42 @@ export default function Login({ isModal = false }) {
             Remember me
           </label>
           <Checkbox
+            disabled={!nostr}
             id="rememberMe"
             checked={rememberMe}
-            onCheckedChange={(e) => {
+            onCheckedChange={async (e) => {
               setRememberMe(e.valueOf() as boolean);
             }}
           />
         </div>
+        {nostr === null && (
+          <p className="p-2 border border-error rounded bg-error/10 text-sm">
+            It seems you don't have a nostr compatible extension
+          </p>
+        )}
+
+        <LoadNostrAvailability nostr={nostr} />
       </div>
     </form>
   );
+}
+
+function LoadNostrAvailability({ nostr }: { nostr: NostrService }) {
+  if (nostr === null) {
+    return (
+      <div className="p-2 border border-error rounded bg-error/10 text-sm">
+        It seems you don't have a nostr compatible extension
+      </div>
+    );
+  }
+
+  if (nostr === undefined) {
+    return (
+      <div className="p-2 flex items-center justify-center">
+        <Loader2 className="w-5 h-5 animate-spin" />
+      </div>
+    );
+  }
+
+  return null;
 }

@@ -1,50 +1,41 @@
-import { SignJWT, jwtVerify } from "jose";
+import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { Profile } from "./actions/auth";
 import { InvalidSessionError } from "./exceptions";
+import { getTokenExpiration } from "./misc";
 
-const jwtSecret = "secret";
-const key = new TextEncoder().encode(jwtSecret);
+export function getJwtSecretKey() {
+  const secret = process.env.JWT_SECRET;
 
-export const SESSION_DURATION = {
-  // short: 60 * 60 * 1000,
-  // long: 30 * 24 * 60 * 60 * 1000,
-  short: 15 * 1000,
-  long: 40 * 1000,
-  logout: 0,
-} as const;
-
-export async function setSession(
-  user: Profile[] | null,
-  span = SESSION_DURATION.short,
-) {
-  let expires: Date;
-  switch (span) {
-    case SESSION_DURATION.short:
-      // 1 hour
-      cookies().set("rememberMe", "false", { maxAge: SESSION_DURATION.short });
-      expires = new Date(Date.now() + SESSION_DURATION.short);
-      break;
-    case SESSION_DURATION.long:
-      // 30 days
-      cookies().set("rememberMe", "true", { maxAge: SESSION_DURATION.long });
-      expires = new Date(Date.now() + SESSION_DURATION.long);
-      break;
-    case SESSION_DURATION.logout:
-      expires = new Date(Date.now() + SESSION_DURATION.logout);
-      break;
-    default:
-      expires = new Date(Date.now() + SESSION_DURATION.short);
+  if (!secret) {
+    throw new Error("JWT Secret key is not set");
   }
 
-  const session = await encode({ profiles: user, expires });
+  const enc: Uint8Array = new TextEncoder().encode(secret);
+  return enc;
+}
+
+type Payload = JWTPayload & {
+  profiles: Profile[];
+  expires: Date;
+  rememberMe: boolean;
+};
+
+export async function setSession(user: Profile[] | null, rememberMe = false) {
+  if (!user) {
+    cookies().delete("session");
+    return;
+  }
+
+  const expires = getTokenExpiration(rememberMe);
+  const value = await encode({ profiles: user, expires, rememberMe });
   cookies().set({
     name: "session",
-    value: session,
-    path: "*",
-    expires: expires,
+    value,
+    expires,
     httpOnly: true,
+    path: "/",
   });
 }
 
@@ -65,40 +56,38 @@ export async function updateSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return;
 
-  const rememberMe = cookies().get("rememberMe")?.value === "true";
-  const duration = rememberMe ? SESSION_DURATION.long : SESSION_DURATION.short;
-
+  const res = NextResponse.next();
   try {
-    let parsed = await decode(session);
-    parsed.expires = new Date(Date.now() + duration);
+    let parsed = (await decode(session)) as Payload;
+    parsed.expires = getTokenExpiration(parsed.rememberMe);
 
-    const res = NextResponse.next();
     res.cookies.set({
       name: "session",
       value: await encode(parsed),
-      path: "/",
-      expires: parsed.expires as Date,
+      expires: parsed.expires,
       httpOnly: true,
+      path: "/",
     });
     return res;
   } catch (e) {
     // TODO: log error to some system
     console.error(e);
+    res.cookies.delete("session");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 
-async function encode(payload: any) {
+async function encode(payload: Payload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("1h")
-    .sign(key);
+    .setExpirationTime(getTokenExpiration(payload.rememberMe))
+    .sign(getJwtSecretKey());
 }
 
 export async function decode(token: string) {
   try {
-    const { payload } = await jwtVerify(token, key, {
+    const { payload } = await jwtVerify(token, getJwtSecretKey(), {
       algorithms: ["HS256"],
     });
 

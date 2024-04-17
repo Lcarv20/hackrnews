@@ -18,6 +18,8 @@ export async function middleware(request: NextRequest) {
   } catch (e) {
     const res = NextResponse.next();
     const { name, message } = e as Error & { name: string; message: string };
+    // log this message on the client using toast or find a better way to recover from a failed
+    // updateSession()
     res.headers.set(
       InvalidSessionError.name,
       JSON.stringify({
@@ -25,6 +27,7 @@ export async function middleware(request: NextRequest) {
         message,
       }),
     );
+
     return res;
   }
 }
