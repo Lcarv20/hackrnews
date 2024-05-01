@@ -1,4 +1,4 @@
-import { RoundButton } from "@/ui/buttons";
+import { Button } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -10,9 +10,9 @@ export default function RootLayout({
   return (
     <div className='h-full'>
       <Link href="/">
-        <RoundButton variant="primary">
+        <Button >
           <HomeIcon className="w-5 h-5" />
-        </RoundButton>
+        </Button>
       </Link>
       {children}
     </div>

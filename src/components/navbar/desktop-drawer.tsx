@@ -6,8 +6,8 @@ import { Drawer } from "vaul";
 import { twJoin } from "tailwind-merge";
 import ThemeToggler from "./theme-toggler";
 import RelayPreferences from "./relay-preferences";
-import { RoundButton } from "@/ui/buttons";
 import { closeOnScreenSize } from "@/utils/misc";
+import { Button } from "@/components/ui/button";
 
 export default function DesktopDrawer() {
   const [open, setOpen] = useState<boolean>(false);
@@ -41,9 +41,9 @@ export default function DesktopDrawer() {
           )}
         >
           <div className="pt-3 pl-3">
-            <RoundButton onClick={() => setOpen(false)}>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
               <ChevronsRightIcon></ChevronsRightIcon>
-            </RoundButton>
+            </Button>
           </div>
           <div className="p-8 h-full overflow-hidden flex flex-col gap-10 justify-center">
             {/* THEME TOGGLER */}

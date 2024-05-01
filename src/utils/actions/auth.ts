@@ -1,14 +1,13 @@
 "use server";
 
 import { kinds } from "nostr-tools";
-import { DEFAULT_RELAYS, pool } from "@utils/nostr";
-import { setSession } from "@utils/session";
+import { DEFAULT_RELAYS, pool } from "@/utils/nostr";
+import { setSession } from "@/utils/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 export type Profile = {
-  relay: string;
   displayName?: string;
   name?: string;
   picture?: string;
@@ -27,39 +26,30 @@ export async function loginWithExt(publickey: string, rememberMe = false) {
   let redirectPath: string | null = null;
 
   try {
+    const profileEv = await pool.get(DEFAULT_RELAYS, {
+      kinds: [kinds.Metadata],
+      authors: [publickey],
+    });
 
-    for (const relay of DEFAULT_RELAYS) {
-      const filter = {
-        kinds: [kinds.Metadata],
-        authors: [publickey],
-      };
-      // TODO: Check how to handle bad relays
-      const event = await pool.querySync([relay], filter);
-      if (!event[0]) {
-        continue;
-      }
-      const json = JSON.parse(event[0].content);
+    console.log("events", profileEv);
 
-      const profile: Profile = {
-        relay,
-        publickey,
-        name: json.name,
-        displayName: json.display_name,
-        picture: json.picture,
-        banner: json.banner,
-        about: json.about,
-        website: json.website,
-        lud06: json.lud06,
-        lud16: json.lud16,
-      };
-      profiles.push(profile);
-    }
-
-    if (!profiles.length) {
+    if (!profileEv?.content) {
       throw new Error("No profile found");
     }
+    const json = JSON.parse(profileEv.content);
 
-    await setSession(profiles, rememberMe);
+    const profile: Profile = {
+      publickey,
+      name: json.name,
+      displayName: json.display_name,
+      picture: json.picture,
+      banner: json.banner,
+      about: json.about,
+      website: json.website,
+      lud06: json.lud06,
+      lud16: json.lud16,
+    };
+    await setSession(profile, rememberMe);
     revalidatePath("/login");
     redirectPath = "/";
   } catch (error) {
@@ -75,6 +65,7 @@ export async function loginWithExt(publickey: string, rememberMe = false) {
 }
 
 export async function logout() {
+  console.log("i should run")
   await setSession(null);
   revalidatePath("/");
 }

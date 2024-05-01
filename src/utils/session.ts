@@ -17,19 +17,19 @@ export function getJwtSecretKey() {
 }
 
 type Payload = JWTPayload & {
-  profiles: Profile[];
+  profile: Profile;
   expires: Date;
   rememberMe: boolean;
 };
 
-export async function setSession(user: Profile[] | null, rememberMe = false) {
+export async function setSession(user: Profile | null, rememberMe = false) {
   if (!user) {
     cookies().delete("session");
     return;
   }
 
   const expires = getTokenExpiration(rememberMe);
-  const value = await encode({ profiles: user, expires, rememberMe });
+  const value = await encode({ profile: user, expires, rememberMe });
   cookies().set({
     name: "session",
     value,
@@ -39,12 +39,12 @@ export async function setSession(user: Profile[] | null, rememberMe = false) {
   });
 }
 
-export async function getSession(): Promise<Profile[] | null> {
+export async function getSession(): Promise<Profile | null> {
   const session = cookies().get("session");
   if (!session?.value) return null;
   try {
     const data = await decode(session?.value!);
-    return data.profiles as Profile[];
+    return data.profile as Profile;
   } catch (e) {
     // TODO: log error
     console.error(e);

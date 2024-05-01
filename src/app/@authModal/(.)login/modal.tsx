@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { RoundButton } from "@/ui/buttons";
+import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
 import { ElementRef, useEffect, useRef } from "react";
 import { twJoin } from "tailwind-merge";
@@ -47,9 +47,9 @@ export function Modal({ children }: { children: React.ReactNode }) {
         // "overflow-hidden relative"
       )}
     >
-      <RoundButton onClick={close}>
+      <Button size="icon" variant="ghost" onClick={close}>
         <XIcon></XIcon>
-      </RoundButton>
+      </Button>
       {children}
     </dialog>,
     document.getElementById("modal-root")!,

@@ -4,7 +4,14 @@ import {
   Silkscreen,
   Space_Grotesk,
   Tourney,
+  Outfit,
+  Inter,
 } from "next/font/google";
+
+export const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 // logo
 export const tourney = Tourney({
@@ -38,4 +45,10 @@ export const silkScreen = Silkscreen({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-silk-screen",
+});
+
+export const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-outfit",
 })

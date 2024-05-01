@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@ui/buttons";
-import Logo from "@components/logo";
+import Logo from "@/components/logo";
 import { BlocksIcon, InfoIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { NostrService, useNostr } from "@/utils/hooks/use-nostr";
@@ -9,6 +8,7 @@ import { loginWithExt } from "@/utils/actions/auth";
 import Checkbox from "@/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function Login({ isModal = false }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function Login({ isModal = false }) {
 
         <Button
           onClick={handleLogin}
-          variant="primary"
+          variant="default"
           className="w-full"
           disabled={isLoading || !nostr}
         >
@@ -87,21 +87,21 @@ export default function Login({ isModal = false }) {
         </div>
         {nostr === null && (
           <p className="p-2 border border-error rounded bg-error/10 text-sm">
-            It seems you don't have a nostr compatible extension
+            {`It seems you don't have a nostr compatible extension`}
           </p>
         )}
 
-        <LoadNostrAvailability nostr={nostr} />
+        <NostrAvailability nostr={nostr} />
       </div>
     </form>
   );
 }
 
-function LoadNostrAvailability({ nostr }: { nostr: NostrService }) {
+function NostrAvailability({ nostr }: { nostr: NostrService }) {
   if (nostr === null) {
     return (
       <div className="p-2 border border-error rounded bg-error/10 text-sm">
-        It seems you don't have a nostr compatible extension
+       {`It seems you don't have a nostr compatible extension`} 
       </div>
     );
   }

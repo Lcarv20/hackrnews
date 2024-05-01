@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, RoundButton } from "@/ui/buttons";
 import { closeOnScreenSize, isMobile } from "@/utils/misc";
 import { routes } from "@/utils/routes";
 import {
@@ -16,6 +15,7 @@ import { twJoin } from "tailwind-merge";
 import { Drawer } from "vaul";
 import RelayPreferences from "./relay-preferences";
 import ThemeToggler from "./theme-toggler";
+import { Button } from "../ui/button";
 
 // INFO: Setting the snap array to 0 as initial value is a hack
 // to prevent the drawer from closing on initial render.
@@ -259,7 +259,8 @@ function SnapControls({
     <div className="fixed right-4 top-4">
       {snap === 1 ? (
         <div className="space-x-5">
-          <RoundButton
+          <Button
+            variant="ghost"
             onClick={() => {
               containerRef.current?.scrollTo({
                 top: 0,
@@ -268,27 +269,27 @@ function SnapControls({
             }}
           >
             <ChevronDown className="w-7 h-7 text-discreetText" />
-          </RoundButton>
+          </Button>
 
-          <RoundButton
+          <Button variant="ghost"
             onClick={() => {
               setOpen(false);
             }}
             className="bg-surface2/80 p-1"
           >
             <ChevronsDown className="w-7 h-7 text-subText" />
-          </RoundButton>
+          </Button>
         </div>
       ) : (
         <>
-          <RoundButton
+          <Button variant="ghost"
             onClick={() => {
               setSnap(snapPoints[2]);
             }}
             className="bg-surface2/80 p-1"
           >
             <ChevronUp className="w-7 h-7 text-discreetText animate-bounce" />
-          </RoundButton>
+          </Button>
         </>
       )}
     </div>

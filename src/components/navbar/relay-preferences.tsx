@@ -1,11 +1,11 @@
 import React from "react";
 import { Drawer } from "vaul";
-import { Button } from "@ui/buttons";
 import { SearchIcon } from "lucide-react";
 import { RELAYS_MOCK } from "./relays.mock";
 import { twJoin } from "tailwind-merge";
 import Image from "next/image";
 import Switch from "@/ui/switch";
+import { Button } from "@/components/ui/button";
 
 //ISSUE: problem with desktop small screen. for some reason the links disappear
 export default function RelayPreferences() {
