@@ -14,18 +14,16 @@ export default async function Navbar() {
         className={twJoin(
           "bg-background drop-shadow-md rounded-lg p-4 px-6 border",
           "md:p-2 md:px-[2rem] flex items-center",
-          "sticky top-0 z-10 float-border"
+          "sticky top-0 z-10 float-border",
         )}
       >
         <Logo />
-        <div className="grow ml-4">
+        {/* Desktop Routes */}
+        <div className="hidden lg:flex gap-2">
           <MenuLinks />
         </div>
-        {/* <div className="lg:hidden ml-auto"> */}
-        {/*   <MobileDrawer /> */}
-        {/* </div> */}
 
-        <div className="hidden gap-4 justify-center items-center lg:flex">
+        <div className="ml-auto">
           <OptionsMenu session={session} />
         </div>
       </nav>

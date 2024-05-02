@@ -3,42 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  BriefcaseIcon,
-  HomeIcon,
-  MessageSquareIcon,
-  NewspaperIcon,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const MENU_ROUTES = [
-  {
-    name: "Home",
-    href: "/",
-    icon: <HomeIcon className="h-4 w-4" />,
-  },
-  {
-    name: "Articles",
-    href: "/articles",
-    icon: <NewspaperIcon className="h-4 w-4" />,
-  },
-  {
-    name: "Discussions",
-    href: "/discussions",
-    icon: <MessageSquareIcon className="h-4 w-4" />,
-  },
-  {
-    name: "Jobs",
-    href: "/jobs",
-    icon: <BriefcaseIcon className="h-4 w-4" />,
-  },
-];
+import { MENU_ROUTES } from "@/lib/constants";
 
 export default function MenuLinks() {
   const pathname = usePathname();
 
   return (
-    <div className="hidden lg:flex gap-2">
+    <div className="">
       {MENU_ROUTES.map((route) => (
         <Link
           key={route.name}

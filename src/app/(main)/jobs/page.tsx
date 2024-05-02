@@ -15,7 +15,6 @@ export default function Page() {
       <div className="bg-info text-info-foreground">Info</div>
       <div className="bg-destructive text-destructive-foreground">Destructive</div>
 
-
     </div>
   );
 }
