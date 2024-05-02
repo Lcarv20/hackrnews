@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "clear:cache" : "rm -rf .next"
   },
   "dependencies": {
     "@dotlottie/react-player": "^1.6.13",
