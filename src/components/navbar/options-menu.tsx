@@ -330,7 +330,7 @@ function MobileLinks({ path }: { path: string }) {
 
 function DonationDialog() {
   return (
-    <DialogContent className="max-w-sm">
+    <DialogContent className="sm:max-w-sm">
       <DialogHeader>
         <DialogTitle className="mb-4 flex items-center justify-center sm:justify-start">
           <HandHeart className="mr-2 text-brand" /> Donate
