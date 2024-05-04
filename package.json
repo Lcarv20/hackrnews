@@ -21,6 +21,7 @@
     "jose": "^5.2.3",
     "lucide-react": "^0.292.0",
     "next": "14.0.3",
+    "next-auth": "^4.24.7",
     "next-themes": "^0.2.1",
     "nostr-tools": "^2.1.4",
     "react": "^18",

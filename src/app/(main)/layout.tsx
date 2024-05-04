@@ -14,7 +14,9 @@ export default function MainLayout({
   return (
     <main>
       <Navbar />
-      {children}
+      <div className="mt-6">
+        {children}
+      </div>
     </main>
   );
 }
