@@ -82,3 +82,22 @@ export function closeOnScreenSize(stateToggler: () => void) {
     window.removeEventListener("resize", listener);
   };
 }
+
+/**
+ * Checks the user preferences (rememberMe) and returns the appropriate token expiration date.
+ * @param rememberMe - boolean
+ * @returns the expiration date
+ */
+export function getTokenExpiration(rememberMe: boolean) {
+  const SESSION_DURATION = {
+    short: 60 * 60 * 1000,
+    long: 30 * 24 * 60 * 60 * 1000,
+    // short: 15 * 1000,
+    // long: 30 * 1000,
+    logout: 0,
+  } as const;
+
+  const span = rememberMe ? SESSION_DURATION.long : SESSION_DURATION.short;
+  let expires = new Date(Date.now() + span);
+  return expires;
+}

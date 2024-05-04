@@ -27,7 +27,10 @@ export default function ThemeMenu() {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className={twJoin("bg-surface2 rounded-xl z-10 float-border", floatClasses)}
+          className={twJoin(
+            "bg-surface2 rounded-xl z-10 float-border",
+            floatClasses,
+          )}
           sideOffset={5}
         >
           <div className="p-1.5 space-y-1">

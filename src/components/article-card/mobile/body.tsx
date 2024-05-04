@@ -14,7 +14,7 @@ export default function Body(props: ArticleCardProps) {
         <LinkIcon className="w-3.5 h-3.5 inline-block mr-1" />
         {props.relay}
       </Link>
-      {props.tags && props.tags.length > 0 && (
+      {props.tags && (
         <div className="flex justify-end gap-1 pr-8">
           {displayTags(props.tags, 3)}
         </div>

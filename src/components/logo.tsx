@@ -2,18 +2,32 @@ import { silkScreen } from "@/utils/fonts";
 import Link from "next/link";
 import { twJoin } from "tailwind-merge";
 
-export default function Logo() {
+export default function Logo({ isLink = true }: { isLink?: boolean }) {
+  if (isLink) {
+    return (
+      <Link href="/">
+        <h1
+          className={twJoin(
+            "text-3xl uppercase",
+            silkScreen.className,
+            // tourney.className,
+          )}
+        >
+          <span className="text-primary">Hackr</span>news
+        </h1>
+      </Link>
+    );
+  }
+
   return (
-    <Link href="/">
-      <h1
-        className={twJoin(
-          "text-3xl uppercase",
-          silkScreen.className,
-          // tourney.className,
-        )}
-      >
-        <span className="text-primary">Hackr</span>news
-      </h1>
-    </Link>
+    <h1
+      className={twJoin(
+        "text-3xl uppercase",
+        silkScreen.className,
+        // tourney.className,
+      )}
+    >
+      <span className="text-primary">Hackr</span>news
+    </h1>
   );
 }

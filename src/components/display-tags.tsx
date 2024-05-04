@@ -1,22 +1,29 @@
 import Pill from "@/ui/pill";
+import * as Dialog from "@radix-ui/react-dialog";
 
 export default function displayTags(tags: string[], limit = 3) {
   let tagsRow: JSX.Element[] = [];
+  const tagsSet = new Set(tags);
+  let i = 0;
 
-  for (let i = 0; i < tags.length; i++) {
+  for (const tag of tagsSet) {
     if (i === limit) {
       tagsRow.push(
-        <Pill variant="ghost" key={tags[i] + i}>
-          + {tags.length - limit}
+        <Pill variant="ghost" key={tag + i}>
+          + {tagsSet.size - limit}
         </Pill>,
       );
       break;
     }
+
     tagsRow.push(
-      <Pill variant="primary" key={tags[i] + i}>
-        #{tags[i]}
-      </Pill>,
+      <Dialog.Root>
+        <Pill variant="primary" key={tag + i}>
+          {tag}
+        </Pill>
+      </Dialog.Root>,
     );
+    i++;
   }
 
   return tagsRow;

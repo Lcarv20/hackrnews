@@ -2,6 +2,7 @@ import Divider from "@ui/divider";
 import Logo from "@components/logo";
 import { twJoin } from "tailwind-merge";
 import MenuLinks from "./menu-links";
+import React from "react";
 import { cookies } from "next/headers";
 import ThemeMenu from "./theme-menu";
 import MobileDrawer from "./mobile-drawer";
@@ -9,15 +10,12 @@ import DesktopDrawer from "./desktop-drawer";
 import Accounts from "./accounts";
 import Link from "next/link";
 import { OutlineButton } from "@/ui/buttons";
-import { Profile } from "@/utils/actions/auth";
 import { User2Icon } from "lucide-react";
+import { getSession } from "@/utils/session";
 
-export default function Navbar() {
+export default async function Navbar() {
   const isPinned = cookies().get("pinned")?.value === "true" ?? false;
-  const stringProfiles = cookies().get("profiles")?.value;
-  const profilesVal: Profile[] | null = stringProfiles
-    ? JSON.parse(stringProfiles)
-    : null;
+  const session = await getSession();
 
   return (
     <>
@@ -38,16 +36,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden gap-4 justify-center items-center lg:flex">
-          {!profilesVal ? (
-            <Login />
-          ) : (
-              // TODO: check how to do this
-            <Suspense fallback={<div>Loading...</div>}>
-              <Accounts profiles={profilesVal} />
-            </Suspense>
-          )}
-
-          {/* <Accounts profiles={profilesVal} /> */}
+          {!session ? <LoginBtn /> : <Accounts profiles={session} />}
           <Divider vertical />
 
           <DesktopDrawer />
@@ -57,7 +46,7 @@ export default function Navbar() {
   );
 }
 
-function Login() {
+function LoginBtn() {
   return (
     <Link href="/login">
       <OutlineButton variant="primary" className="flex -space-x-4">

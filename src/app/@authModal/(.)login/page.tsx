@@ -1,10 +1,10 @@
 import Login from "@/components/login";
 import Modal from "@/components/server-modal";
 
-export default function Page() {
+export default async function Page() {
   return (
     <Modal>
-      <Login />
+      <Login isModal></Login>
     </Modal>
   );
 }

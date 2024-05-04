@@ -75,9 +75,11 @@ export default function DesktopCard(props: ArticleCardProps) {
           <span>{props.author}</span>
         </Button>
 
-        <div className="ml-auto col-span-11 row-span-1 flex items-center justify-end gap-1">
-          {displayTags(props.tags, 4)}
-        </div>
+        {props.tags && (
+          <div className="ml-auto col-span-11 row-span-1 flex items-center justify-end gap-1">
+            {displayTags(props.tags, 4)}
+          </div>
+        )}
       </div>
     </div>
   );
