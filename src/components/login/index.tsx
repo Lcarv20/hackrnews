@@ -42,7 +42,6 @@ export default function Login({ isModal = false }) {
     }
   }
 
-export default function Login() {
   return (
     <form>
       <div className="flex flex-col gap-4 p-6 max-w-md mx-auto">
@@ -102,7 +101,7 @@ function NostrAvailability({ nostr }: { nostr: NostrService }) {
   if (nostr === null) {
     return (
       <div className="p-2 border border-error rounded bg-error/10 text-sm">
-       {`It seems you don't have a nostr compatible extension`} 
+        {`It seems you don't have a nostr compatible extension`}
       </div>
     );
   }

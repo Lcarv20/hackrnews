@@ -25,7 +25,7 @@ import {
   UserIcon,
   ZapIcon,
 } from "lucide-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { LogOut, Settings } from "lucide-react";
 import {
   DropdownMenu,
@@ -332,7 +332,7 @@ function DonationDialog() {
   return (
     <DialogContent className="max-w-sm">
       <DialogHeader>
-        <DialogTitle className="mb-4 flex items-center">
+        <DialogTitle className="mb-4 flex items-center justify-center sm:justify-start">
           <HandHeart className="mr-2 text-brand" /> Donate
         </DialogTitle>
         <DialogDescription>All support is appreciated!</DialogDescription>
