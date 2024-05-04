@@ -1,4 +1,4 @@
-import { DEFAULT_RELAYS, pool } from "../nostr";
+import { DEFAULT_RELAYS, pool } from "@/utils/nostr";
 
 // FIXME: Tis won't work because nextjs team it's all about functional bros.
 // even though fking js is not the language for that. -> convert this to function

@@ -30,6 +30,7 @@ export default function RootLayout({
       >
         <Providers>
           <main
+            id="main"
             className={twJoin(
               "text-textColor",
               "transition-colors duration-200 ease-linear",

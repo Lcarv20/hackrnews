@@ -25,7 +25,7 @@ import {
   UserIcon,
   ZapIcon,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { LogOut, Settings } from "lucide-react";
 import {
   DropdownMenu,
@@ -44,7 +44,7 @@ import { Profile, logout } from "@/utils/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   DialogHeader,
@@ -54,7 +54,7 @@ import {
   DialogTrigger,
   DialogTitle,
   DialogDescription,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import { useReward } from "react-rewards";
 import { usePathname } from "next/navigation";
 import { MENU_ROUTES } from "@/lib/constants";
