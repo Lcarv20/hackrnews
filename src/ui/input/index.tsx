@@ -30,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label
             className={twJoin(
               "absolute top-3 left-0 text-base text-subText pointer-events-none transition duration-200",
-              "ease-in-out bg-inherit px-2 peer-disabled:opacity-40 peer-focus:text-black rounded-xl",
+              "ease-in-out bg-inherit px-2 peer-disabled:opacity-40 peer-focus:text-textColor rounded-xl",
             )}
           >
             {label}

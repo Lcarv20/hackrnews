@@ -42,6 +42,7 @@ export default function Login({ isModal = false }) {
     }
   }
 
+export default function Login() {
   return (
     <form>
       <div className="flex flex-col gap-4 p-6 max-w-md mx-auto">
