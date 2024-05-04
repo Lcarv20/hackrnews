@@ -101,7 +101,7 @@ function NostrAvailability({ nostr }: { nostr: NostrService }) {
   if (nostr === null) {
     return (
       <div className="p-2 border border-error rounded bg-error/10 text-sm">
-       {`It seems you don't have a nostr compatible extension`} 
+        {`It seems you don't have a nostr compatible extension`}
       </div>
     );
   }
