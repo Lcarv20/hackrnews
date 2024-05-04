@@ -1,59 +1,45 @@
 "use client";
 
-import { RoundButton } from "@/ui/buttons";
-import { floatClasses } from "@/ui/prestyled";
-import { themes } from "@/utils/themes";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { PaletteIcon } from "lucide-react";
+import * as React from "react";
+import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
-import { twJoin } from "tailwind-merge";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export default function ThemeMenu() {
-  const [open, setOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <DropdownMenu.Root open={open} onOpenChange={setOpen}>
-      <span className="sr-only">Color Theme</span>
-      <DropdownMenu.Trigger asChild>
-        {/* NOTE: This Rounded Button doesn't work as intended. Passing classes in braces ruins the merge */}
-        <RoundButton
-          className={twJoin(open ? "bg-surface3" : "hover:bg-surface2")}
-        >
-          <PaletteIcon className="w-6 h-6" />
-        </RoundButton>
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          className={twJoin(
-            "bg-surface2 rounded-xl z-10 float-border",
-            floatClasses,
-          )}
-          sideOffset={5}
-        >
-          <div className="p-1.5 space-y-1">
-            {themes.map((t) => (
-              <DropdownMenu.Item
-                key={t.name}
-                className={twJoin(
-                  "flex items-center gap-3 px-4 py-2 cursor-pointer",
-                  "rounded-lg bg-background",
-                  "hover:bg-primary/20 ",
-                  theme === t.name && "text-primary ring-1 ring-primary",
-                )}
-                onClick={() => {
-                  setTheme(t.name);
-                }}
-              >
-                {t.icon} {t.name}
-              </DropdownMenu.Item>
-            ))}
-          </div>
-          <DropdownMenu.Arrow className="fill-surface2" />
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+    <DropdownMenu onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" shape="circle" className={cn(open && "bg-accent")}>
+          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          <SunIcon className="mr-2 h-4 w-4" />
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          <MoonIcon className="mr-2 h-4 w-4" />
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          <ComputerIcon className="mr-2 h-4 w-4" />
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

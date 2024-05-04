@@ -2,15 +2,15 @@
 
 import * as Popover from "@radix-ui/react-popover";
 import CheckAnimation, { ExtendedRef } from "@/ui/animated-check";
-import { RoundButton } from "@/ui/buttons";
 import ImageAvatar from "@/ui/image-avatar";
 import { nFormatter } from "@/utils/misc";
 import { useCopyToClipboard } from "@/utils/hooks/copy-to-clipboard";
-import { CodeIcon, CopyIcon, EyeIcon, InfoIcon } from "lucide-react";
+import { CopyIcon, EyeIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { twJoin } from "tailwind-merge";
 import { floatClasses } from "@/ui/prestyled";
+import { Button } from "@/components/ui/button";
 
 export default function InfoBtn({
   views,
@@ -24,13 +24,14 @@ export default function InfoBtn({
 }) {
   const [_, copy] = useCopyToClipboard();
   const checkAnimeRef = React.useRef<ExtendedRef | null>(null);
-  const panelRef = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <RoundButton
+        <Button
+          variant="ghost"
+          size="icon"
           className={twJoin(
             "relative ml-auto",
             "flex items-center rounded-full hover:bg-surface2 p-2 active:bg-surface3",
@@ -38,7 +39,7 @@ export default function InfoBtn({
           )}
         >
           <InfoIcon className="text-info w-5 h-5" />
-        </RoundButton>
+        </Button>
       </Popover.Trigger>
 
       <Popover.Portal>
@@ -96,7 +97,7 @@ export default function InfoBtn({
             </button>
           </div>
 
-          <Popover.Arrow className="fill-background drop-shadow-[0_1px_0px_theme(colors.surface3)]" />
+          <Popover.Arrow className="fill-background" />
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

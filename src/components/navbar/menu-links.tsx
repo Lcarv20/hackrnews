@@ -3,52 +3,37 @@
 import { Button } from "@/ui/buttons";
 import { ROUTES } from "@/utils/routes";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { twJoin } from "tailwind-merge";
+import { usePathname } from "next/navigation";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { MENU_ROUTES } from "@/lib/constants";
 
-export default function MenuLinks({
-  isMobile,
-  setIsOpen,
-}: {
-  isMobile?: boolean;
-  setIsOpen?: (open: boolean) => void;
-}) {
+export default function MenuLinks() {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const buttonClasses = twJoin(
-    "gap-3 active:bg-primary/30",
-    isMobile ? "justify-start w-full" : "justify-center items-center",
-  );
 
   return (
-    <div
-      className={twJoin(
-        "lg:ml-6 xl:ml-12 gap-2 lg:gap-1 xl:gap-4",
-        "focus-within:ring-primary lg:grow",
-        isMobile ? "flex flex-col" : "hidden lg:flex ",
-      )}
-    >
-      {ROUTES.map((route) => (
-        <Link href={route.path} key={route.name}>
-          <Button
-            onClick={() => {
-              setIsOpen?.(false);
-              router.push(route.path);
-            }}
-            tabIndex={-1}
-            className={buttonClasses}
+    <div className="">
+      {MENU_ROUTES.map((route) => (
+        <Link
+          key={route.name}
+          href={route.href}
+          className={buttonVariants({
+            variant: "link",
+            size: "sm",
+            className: "text-foreground gap-2",
+          })}
+        >
+          <span className={cn(route.href === pathname && "text-brand")}>
+            {route.icon}
+          </span>
+          <span
+            className={cn(
+              pathname === route.href &&
+              "underline underline-offset-4 decoration-2 decoration-brand",
+            )}
           >
-            {route.Icon}
-            <span
-              className={twJoin(
-                pathname === route.path &&
-                "underline underline-offset-2 decoration-primary decoration-2",
-              )}
-            >
-              {route.name}
-            </span>
-          </Button>
+            {route.name}
+          </span>
         </Link>
       ))}
     </div>

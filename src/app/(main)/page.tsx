@@ -1,6 +1,5 @@
 import ArticleCard from "@/components/article-card";
 import Feed from "@/utils/actions/main-feed";
-import { toast } from "sonner";
 
 export default async function Page() {
   const feed = new Feed();
