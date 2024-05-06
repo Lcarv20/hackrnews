@@ -2,6 +2,7 @@
 
 import {
   ArrowLeftFromLineIcon,
+  ArrowLeftIcon,
   ChevronRightIcon,
   ServerIcon,
   SwatchBookIcon,
@@ -20,6 +21,8 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import anime from "animejs";
+import Appearance from "./appearance";
+import Relays from "./relays";
 
 type SettingsValue = {
   name: string;
@@ -32,12 +35,12 @@ const SETTINGS_VALUES: SettingsValue[] = [
   {
     name: "Appearance",
     icon: <SwatchBookIcon />,
-    body: <div>Appearance</div>,
+    body: <Appearance />,
   },
   {
     name: "Relays",
     icon: <ServerIcon />,
-    body: <div>Relays</div>,
+    body: <Relays />,
   },
 ];
 
@@ -66,24 +69,18 @@ export default function MobileSettings() {
               <span className="group-hover:text-brand transition group-hover:scale-110">
                 {setting.icon}
               </span>
-              <h1 className="text-lg transform transition-transform group-hover:translate-x-3">
+              <h1 className="text-lg transform transition-transform lg:group-hover:translate-x-3">
                 {setting.name}
               </h1>
               <ChevronRightIcon className="h-7 w-7 ml-auto text-muted-foreground transition-all group-hover:scale-125" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-full">
-            <SheetHeader>
-              <SheetTitle>{setting.name}</SheetTitle>
-              {setting.description && (
-                <SheetDescription>{setting.description}</SheetDescription>
-              )}
-            </SheetHeader>
-            {setting.body}
-            <SheetFooter>
+          <SheetContent className="min-w-full">
+            <SheetHeader className="pt-8">
               <SheetClose asChild>
                 <Button
-                  shape="circle"
+                  variant="ghost"
+                  className="absolute left-4 top-4"
                   onClick={() => {
                     anime({
                       targets: "#main",
@@ -93,10 +90,20 @@ export default function MobileSettings() {
                   }}
                   size="icon"
                 >
-                  <ArrowLeftFromLineIcon />
+                  <ArrowLeftIcon />
                 </Button>
               </SheetClose>
-            </SheetFooter>
+              <SheetTitle className="items-center gap-2 justify-center flex border-b-4 border-dotted border-brand pb-2">
+                <span className="text-brand">
+                  {setting.icon}
+                </span>
+                {setting.name}
+              </SheetTitle>
+              {setting.description && (
+                <SheetDescription>{setting.description}</SheetDescription>
+              )}
+            </SheetHeader>
+            {setting.body}
           </SheetContent>
         </Sheet>
       ))}
