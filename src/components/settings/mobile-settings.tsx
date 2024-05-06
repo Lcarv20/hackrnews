@@ -69,7 +69,7 @@ export default function MobileSettings() {
               <span className="group-hover:text-brand transition group-hover:scale-110">
                 {setting.icon}
               </span>
-              <h1 className="text-lg transform transition-transform lg:group-hover:translate-x-3">
+              <h1 className="text-lg transform transition-transform group-hover:translate-x-3">
                 {setting.name}
               </h1>
               <ChevronRightIcon className="h-7 w-7 ml-auto text-muted-foreground transition-all group-hover:scale-125" />
@@ -93,17 +93,18 @@ export default function MobileSettings() {
                   <ArrowLeftIcon />
                 </Button>
               </SheetClose>
-              <SheetTitle className="items-center gap-2 justify-center flex border-b-4 border-dotted border-brand pb-2">
-                <span className="text-brand">
-                  {setting.icon}
-                </span>
+              <SheetTitle
+                className="items-center gap-2 justify-center flex border-b-4 border-dotted
+                border-brand pb-2 text-xl font-bold"
+              >
+                <span className="text-brand">{setting.icon}</span>
                 {setting.name}
               </SheetTitle>
               {setting.description && (
                 <SheetDescription>{setting.description}</SheetDescription>
               )}
             </SheetHeader>
-            {setting.body}
+            <div className="mt-6">{setting.body}</div>
           </SheetContent>
         </Sheet>
       ))}
