@@ -1,5 +1,5 @@
 import ArticleCard from "@/components/article-card";
-import Feed from "@/utils/actions/main-feed";
+import Feed from "@/lib/actions/main-feed";
 
 export default async function Page() {
   const feed = new Feed();

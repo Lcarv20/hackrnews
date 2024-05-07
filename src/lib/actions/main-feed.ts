@@ -1,4 +1,7 @@
-import { DEFAULT_RELAYS, pool } from "@/utils/nostr";
+// TODO: convert this file to an action
+// "use server";
+
+import { DEFAULT_RELAYS, pool } from "@/lib/nostr";
 
 // FIXME: Tis won't work because nextjs team it's all about functional bros.
 // even though fking js is not the language for that. -> convert this to function

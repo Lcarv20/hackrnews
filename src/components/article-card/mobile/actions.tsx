@@ -8,7 +8,7 @@ import {
   MessagesSquareIcon,
   ZapIcon,
 } from "lucide-react";
-import { nFormatter } from "@/utils/misc";
+import { nFormatter } from "@/lib/misc";
 import anime from "animejs";
 import { twJoin } from "tailwind-merge";
 import { Button } from "@/components/ui/button";

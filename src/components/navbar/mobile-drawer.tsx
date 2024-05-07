@@ -1,8 +1,8 @@
 "use client";
 
 import { Button, RoundButton } from "@/ui/buttons";
-import { closeOnScreenSize, isMobile } from "@/utils/misc";
-import { ROUTES } from "@/utils/routes";
+import { closeOnScreenSize, isMobile } from "@/lib/misc";
+import { ROUTES } from "@/lib/routes";
 import {
   ChevronDown,
   ChevronUp,

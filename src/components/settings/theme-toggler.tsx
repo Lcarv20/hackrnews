@@ -4,7 +4,7 @@ import Tooltip from "@/ui/tooltip";
 import {
   getPreferenceCookie,
   setPreferenceCookie,
-} from "@/utils/actions/user-preferences";
+} from "@/lib/actions/user-preferences";
 import { themes } from "@/utils/themes";
 import anime from "animejs";
 import { PinIcon, PinOffIcon } from "lucide-react";

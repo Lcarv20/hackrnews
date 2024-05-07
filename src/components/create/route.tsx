@@ -1,4 +1,4 @@
-import { IRoute } from "@/utils/routes/types";
+import { IRoute } from "@/lib/routes/types";
 import { twJoin } from "tailwind-merge";
 import Link from "next/link";
 

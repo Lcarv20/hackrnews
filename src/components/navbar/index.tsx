@@ -2,7 +2,7 @@ import Logo from "@/components/logo";
 import { twJoin } from "tailwind-merge";
 import MenuLinks from "./menu-links";
 import React from "react";
-import { getSession } from "@/utils/session";
+import { getSession } from "@/lib/session";
 import OptionsMenu from "./options-menu";
 
 export default async function Navbar() {

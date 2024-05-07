@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { nFormatter } from "@/utils/misc";
+import { nFormatter } from "@/lib/misc";
 import anime from "animejs";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import React from "react";

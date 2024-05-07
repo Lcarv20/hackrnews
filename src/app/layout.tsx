@@ -1,5 +1,5 @@
 import { twJoin } from "tailwind-merge";
-import { outfit } from "@/utils/fonts";
+import { outfit } from "@/lib/fonts";
 
 import "./globals.css";
 import Providers from "@/providers";

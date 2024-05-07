@@ -3,8 +3,8 @@
 import Logo from "@/components/logo";
 import { BlocksIcon, InfoIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { NostrService, useNostr } from "@/utils/hooks/use-nostr";
-import { loginWithExt } from "@/utils/actions/auth";
+import { NostrService, useNostr } from "@/lib/hooks/use-nostr";
+import { loginWithExt } from "@/lib/actions/auth";
 import Checkbox from "@/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

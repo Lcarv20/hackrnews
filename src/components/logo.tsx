@@ -1,4 +1,4 @@
-import { silkScreen } from "@/utils/fonts";
+import { silkScreen } from "@/lib/fonts";
 import Link from "next/link";
 import { twJoin } from "tailwind-merge";
 

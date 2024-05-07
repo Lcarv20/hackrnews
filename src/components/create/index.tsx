@@ -1,4 +1,4 @@
-import { CREATE_ROUTES } from "@/utils/routes/create";
+import { CREATE_ROUTES } from "@/lib/routes/create";
 import Route from "./route";
 
 export default function Create() {

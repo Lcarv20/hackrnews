@@ -1,8 +1,8 @@
 "use server";
 
 import { kinds } from "nostr-tools";
-import { DEFAULT_RELAYS, pool } from "@/utils/nostr";
-import { setSession } from "@/utils/session";
+import { DEFAULT_RELAYS, pool } from "@/lib/nostr";
+import { setSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -22,7 +22,6 @@ export type Profile = {
 };
 
 export async function loginWithExt(publickey: string, rememberMe = false) {
-  const profiles: Profile[] = [];
   let redirectPath: string | null = null;
 
   try {
@@ -30,8 +29,6 @@ export async function loginWithExt(publickey: string, rememberMe = false) {
       kinds: [kinds.Metadata],
       authors: [publickey],
     });
-
-    console.log("events", profileEv);
 
     if (!profileEv?.content) {
       throw new Error("No profile found");
@@ -65,7 +62,6 @@ export async function loginWithExt(publickey: string, rememberMe = false) {
 }
 
 export async function logout() {
-  console.log("i should run")
   await setSession(null);
   revalidatePath("/");
 }

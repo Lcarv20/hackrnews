@@ -3,8 +3,8 @@
 import * as Popover from "@radix-ui/react-popover";
 import CheckAnimation, { ExtendedRef } from "@/ui/animated-check";
 import ImageAvatar from "@/ui/image-avatar";
-import { nFormatter } from "@/utils/misc";
-import { useCopyToClipboard } from "@/utils/hooks/copy-to-clipboard";
+import { nFormatter } from "@/lib/misc";
+import { useCopyToClipboard } from "@/lib/hooks/copy-to-clipboard";
 import { CopyIcon, EyeIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";

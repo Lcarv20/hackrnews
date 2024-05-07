@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/ui/buttons";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
