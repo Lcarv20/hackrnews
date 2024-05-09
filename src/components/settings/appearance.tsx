@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import anime from "animejs";
 import {
-  ComputerIcon,
   SunIcon,
   MoonIcon,
   LaptopIcon,

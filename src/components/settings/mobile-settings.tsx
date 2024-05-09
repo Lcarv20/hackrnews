@@ -75,7 +75,7 @@ export default function MobileSettings() {
               <ChevronRightIcon className="h-7 w-7 ml-auto text-muted-foreground transition-all group-hover:scale-125" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="min-w-full">
+          <SheetContent className="min-w-full border flex flex-col">
             <SheetHeader className="pt-8">
               <SheetClose asChild>
                 <Button
@@ -105,6 +105,22 @@ export default function MobileSettings() {
               )}
             </SheetHeader>
             <div className="mt-6">{setting.body}</div>
+            {/* <SheetFooter className="mt-auto flex-col items-start"> */}
+            {/*   <SheetClose asChild> */}
+            {/*     <Button */}
+            {/*       onClick={() => { */}
+            {/*         anime({ */}
+            {/*           targets: "#main", */}
+            {/*           scale: 1, */}
+            {/*           easing: "easeOutExpo", */}
+            {/*         }); */}
+            {/*       }} */}
+            {/*       size="icon" */}
+            {/*     > */}
+            {/*       <ArrowLeftFromLineIcon /> */}
+            {/*     </Button> */}
+            {/*   </SheetClose> */}
+            {/* </SheetFooter> */}
           </SheetContent>
         </Sheet>
       ))}
