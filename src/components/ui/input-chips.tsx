@@ -47,7 +47,7 @@ const MultiValueRemove = (props: MultiValueRemoveProps) => {
 const controlStyles = {
   base: "border rounded-lg bg-background hover:cursor-pointer",
   focus: "outline-none ring-2 ring-ring ring-offset-2 ring-offset-background",
-  // nonFocus: "border-gray-300 hover:border-gray-400",
+  nonFocus: "border",
 };
 const placeholderStyles = "text-muted-foreground pl-1 py-0.5";
 const selectInputStyles = "pl-1 py-0.5";
@@ -71,7 +71,7 @@ const optionStyles = {
     "after:content-['✔'] after:ml-2 after:text-brand text-card-foreground",
 };
 const noOptionsMessageStyles =
-  "text-gray-500 p-2 bg-gray-50 border border-dashed border-gray-200 rounded-sm";
+  "text-accent-foreground p-2 bg-accent border border-dashed rounded-sm";
 
 type ReactSelectProps = Parameters<typeof Select>[0];
 
@@ -93,7 +93,8 @@ export const SelectInput = (props: ReactSelectProps) => (
       multiValueLabel: (base) => ({
         ...base,
         whiteSpace: "normal",
-        overflow: "visible",
+        wordWrap: "break-word",
+        overflowWrap: "break-word",
       }),
       control: (base) => ({
         ...base,
@@ -102,7 +103,11 @@ export const SelectInput = (props: ReactSelectProps) => (
     }}
     components={{ DropdownIndicator, ClearIndicator, MultiValueRemove }}
     classNames={{
-      control: () => cn(controlStyles.focus, controlStyles.base),
+      control: ({ isFocused }) =>
+        cn(
+          isFocused ? controlStyles.focus : controlStyles.nonFocus,
+          controlStyles.base,
+        ),
       placeholder: () => placeholderStyles,
       input: () => selectInputStyles,
       valueContainer: () => valueContainerStyles,
