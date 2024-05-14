@@ -1,22 +1,26 @@
-/**
- * Copyright 2024 Name
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 import React from "react";
-import { twMerge } from "tailwind-merge";
-import styles from "./styles.module.css";
+import { cn } from "@/lib/utils";
 
 export default function DangerWrapper({
   children,
-  className,
+  outerClasses,
+  innerClasses
 }: {
   children: React.ReactNode;
-  className?: string;
+  outerClasses?: string;
+  innerClasses?: string;
 }) {
   return (
-    <div className={twMerge(styles.stripes, "p-0.5 rounded-lg", className)}>
-      <div className="bg-background rounded-lg">{children}</div>
+    <div
+      className={cn(
+        "p-[2.5px] rounded-lg pattern-diagonal-lines pattern-yellow-500 pattern-bg-black",
+        "pattern-size-4 pattern-opacity-80",
+        outerClasses,
+      )}
+    >
+      <div className={cn("bg-background rounded-lg p-2", innerClasses)}>
+        {children}
+      </div>
     </div>
   );
 }

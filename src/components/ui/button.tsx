@@ -30,7 +30,7 @@ const buttonVariants = cva(
       },
       shape: {
         default: "rounded-md",
-        circle: "rounded-full !p-2",
+        circle: "rounded-full p-2",
       },
     },
     defaultVariants: {
