@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon, XIcon } from "lucide-react";
-import React, { useId } from "react";
+import React from "react";
 import ReactSelect, {
   components,
   DropdownIndicatorProps,
@@ -198,5 +198,5 @@ export const SelectInput = (props: ReactSelectProps) => {
       }}
       {...props}
     />
-  )
+  );
 };
