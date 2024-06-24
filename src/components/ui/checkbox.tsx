@@ -9,15 +9,16 @@ const Checkbox = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <label
         className={cn(
-          "flex items-center pointer-events-auto p-1.5 rounded-full",
+          "flex items-center pointer-events-none p-1.5 rounded-full",
           "w-fit active:bg-brand/20",
+          props.disabled && "active:bg-transparent",
         )}
       >
         <input
           ref={ref}
           type="checkbox"
           className={cn(
-            "w-5 h-5 appearance-none shadow bg-secondary transition-colors",
+            "w-5 h-5 appearance-none shadow transition-colors pointer-events-auto",
             "border border-primary cursor-pointer rounded-md",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "hover:border-brand hover:shadow-brand",

@@ -15,6 +15,9 @@ const config = {
     hoverOnlyWhenSupported: true,
   },
   theme: {
+    content: {
+      checkMark: "url(/check-mark.svg)",
+    },
     patterns: {
       opacities: {
         100: "1",
