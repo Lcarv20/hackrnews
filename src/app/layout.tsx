@@ -42,9 +42,19 @@ export default function RootLayout({
             </Container>
           </main>
           <div id="modal-root" />
-          <Toaster />
+          <Toaster
+            toastOptions={{
+              classNames: {
+                error: "bg-destructive text-destructive-foreground",
+                success: "bg-success text-success-foreground",
+                warning: "bg-warn text-warn-foreground",
+                info: "bg-info text-info-foreground",
+              },
+            }}
+          />
         </Providers>
       </body>
     </html>
   );
 }
+
