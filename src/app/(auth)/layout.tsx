@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <div className='h-full'>
       <Link href="/">
-        <Button >
+        <Button variant="secondary" >
           <HomeIcon className="w-5 h-5" />
         </Button>
       </Link>

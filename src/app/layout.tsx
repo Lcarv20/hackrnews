@@ -10,14 +10,14 @@ import { cn } from "@/lib/utils";
 export const metadata = {
   title: "Articool",
   description: "Best articles on the web",
-}
+};
 
 export default function RootLayout({
   children,
-  authModal,
+  modal,
 }: {
   children: React.ReactNode;
-  authModal: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -37,8 +37,8 @@ export default function RootLayout({
             )}
           >
             <Container>
+              {modal}
               {children}
-              {authModal}
             </Container>
           </main>
           <div id="modal-root" />
@@ -57,4 +57,3 @@ export default function RootLayout({
     </html>
   );
 }
-
