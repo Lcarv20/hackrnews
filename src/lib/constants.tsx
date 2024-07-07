@@ -46,3 +46,11 @@ export const THEMES = [
   },
 ];
 
+export const NOSTR_WATCH = "https://api.nostr.watch/v1/online";
+
+/**
+ * @constant
+ * This is only used to retrive profile info in case the user doesn't specify the relay and
+ * the extension doesn't support the 'getRelays()' functionality
+ */
+export const DEFAULT_SOURCE = "wss://relay.damus.io";

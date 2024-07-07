@@ -1,5 +1,4 @@
-// steak overflow copium
-// https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
+import { InvalidSourceError } from "./exceptions";
 
 /**
  * Formats a number with a specified number of decimal places.
@@ -100,4 +99,50 @@ export function getTokenExpiration(rememberMe: boolean) {
   const span = rememberMe ? SESSION_DURATION.long : SESSION_DURATION.short;
   let expires = new Date(Date.now() + span);
   return expires;
+}
+
+/**
+ * A basic class for converting URL protocols.
+ */
+export class UrlProtocolUtils {
+  /**
+   * Protocol Regex. Has access to methods like .test()
+   */
+  private static hasProtocol = new RegExp(/^(http|https|ws|wss):\/\//); /**
+
+   * Converts a URL from HTTPS to HTTP or WSS to WS.
+   * @param {string} url - The input URL string.
+   * @return {string} The converted URL string.
+   */
+  public static toHTTP(url: string): string {
+    if (this.hasProtocol.test(url)) {
+      return url.replace("wss://", "https://").replace("ws://", "http://");
+    }
+    return "https://" + url;
+  }
+
+  /**
+   * Converts a URL from HTTP to WSS or HTTPS to WS.
+   * @param {string} url - The input URL string.
+   * @return {string} The converted URL string.
+   */
+  public static toWS(url: string): string {
+    if (this.hasProtocol.test(url)) {
+      return url.replace("https://", "wss://").replace("http://", "ws://");
+    }
+    return "wss://" + url;
+  }
+
+  /**
+   * Removes the protocol (HTTP, HTTPS, WS, WSS) from a URL.
+   * @param {string} url - The input URL string.
+   * @return {string} The converted URL string without the protocol.
+   */
+  public static removeProtocol(url: string): string {
+    return url
+      .replace("ws://", "")
+      .replace("wss://", "")
+      .replace("http://", "")
+      .replace("https://", "");
+  }
 }

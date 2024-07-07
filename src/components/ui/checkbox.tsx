@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> { }
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Checkbox = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
@@ -10,7 +10,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, InputProps>(
       <label
         className={cn(
           "flex items-center pointer-events-none p-1.5 rounded-full",
-          "w-fit active:bg-brand/20",
+          "w-fit active:bg-brand/20 peer-active:bg-brand/20",
           props.disabled && "active:bg-transparent",
         )}
       >

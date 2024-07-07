@@ -1,9 +1,9 @@
 import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { Profile } from "./actions/auth";
 import { InvalidSessionError } from "./exceptions";
 import { getTokenExpiration } from "./misc";
+import { Profile } from "./nostr";
 
 export function getJwtSecretKey() {
   const secret = process.env.JWT_SECRET;
