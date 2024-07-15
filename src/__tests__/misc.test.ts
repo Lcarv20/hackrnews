@@ -1,4 +1,4 @@
-import { getTokenExpiration, nFormatter, UrlProtocolUtils } from "@/lib/misc";
+import { generateTokenExp, nFormatter, UrlProtocolUtils } from "@/lib/misc";
 import { describe, it, expect } from "vitest";
 
 describe("nFormatter", () => {
@@ -31,7 +31,7 @@ describe("nFormatter", () => {
 describe("getTokenExpiration", () => {
   it("should return a date 1 hour from now if rememberMe is false", () => {
     const rememberMe = false;
-    const expirationDate = getTokenExpiration(rememberMe);
+    const expirationDate = generateTokenExp(rememberMe);
 
     const expectedDate = new Date(Date.now() + 60 * 60 * 1000);
     expect(expirationDate.getTime()).toBeCloseTo(expectedDate.getTime(), -2); // Allowing a small margin for timing discrepancies
@@ -39,7 +39,7 @@ describe("getTokenExpiration", () => {
 
   it("should return a date 30 days from now if rememberMe is true", () => {
     const rememberMe = true;
-    const expirationDate = getTokenExpiration(rememberMe);
+    const expirationDate = generateTokenExp(rememberMe);
 
     const expectedDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     expect(expirationDate.getTime()).toBeCloseTo(expectedDate.getTime(), -2); // Allowing a small margin for timing discrepancies

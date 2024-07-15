@@ -3,9 +3,6 @@ import { Event } from "nostr-tools";
 declare global {
   type NostrEvent = Event;
 
-  // interface Window {
-  //   nostr?: any;
-  // }
   interface Window {
     nostr: {
       getPublicKey: () => Promise<string>;
@@ -17,4 +14,13 @@ declare global {
       };
     };
   }
+
+  type ArticoolResponse<T> = {
+    message?: T;
+    ok: boolean;
+    error?: {
+      description: string;
+      name?: string;
+    };
+  };
 }

@@ -1,12 +1,9 @@
-"use client";
-
 import {
   ArrowLeftFromLineIcon,
   ChevronRightIcon,
   ServerIcon,
 } from "lucide-react";
 import React from "react";
-import { z } from "zod";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -18,21 +15,26 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SubmitButton } from "./add-relay-btn";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from "../ui/form";
+import { RelayForm } from "./add-relay-form";
+import { DEFAULT_RELAYS, pool } from "@/lib/nostr";
+import { cookies } from "next/headers";
+import { kinds } from "nostr-tools";
 
-export default function Relays() {
+function retriveRelays() {
+  const userRelays = cookies().get("relays")?.value;
+  if (userRelays) {
+    return JSON.parse(userRelays);
+  }
+  return DEFAULT_RELAYS;
+}
+
+export default async function Relays() {
+  const userRelays = retriveRelays();
+
+  const relays = pool.get(userRelays, {
+    kinds: [kinds.RelayList],
+  });
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -77,66 +79,5 @@ export default function Relays() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
-}
-
-const formSchema = z.object({
-  relay: z
-    .string()
-    .min(1, "Field cannot be empty")
-    .regex(
-      /^(?:(?:(?:wss|ws):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i,
-      {
-        message: "Invalid Format",
-      },
-    ),
-});
-
-function RelayForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      relay: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="relay"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Add a relay</FormLabel>
-              <div className="flex gap-2">
-                <div className="relative grow">
-                  <FormControl>
-                    <Input
-                      className="pl-8"
-                      placeholder="wss://..."
-                      {...field}
-                    />
-                  </FormControl>
-                  <ServerIcon
-                    className="absolute left-3 top-1/2 -translate-y-1/2 
-                text-muted-foreground h-4 w-4 pointer-events-none"
-                  />
-                </div>
-                <SubmitButton />
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </form>
-    </Form>
   );
 }

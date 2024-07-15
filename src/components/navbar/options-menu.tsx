@@ -40,7 +40,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Profile, logout } from "@/lib/actions/auth";
+import { logout } from "@/lib/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -58,6 +58,7 @@ import {
 import { useReward } from "react-rewards";
 import { usePathname } from "next/navigation";
 import { MENU_ROUTES } from "@/lib/constants";
+import { Profile } from "@/lib/nostr";
 
 export default function OptionsMenu({ session }: { session: Profile | null }) {
   const path = usePathname();
@@ -74,13 +75,18 @@ export default function OptionsMenu({ session }: { session: Profile | null }) {
             }),
             "p-1",
             path.includes("profile/" + session?.publickey) &&
-            "ring-2 ring-brand",
+              "ring-2 ring-brand",
           )}
         >
           <ChevronDownIcon className="h-4 w-4" />
           {session ? (
             <Avatar className="h-7 w-7 rounded-[var(--radius)]">
-              <AvatarImage src={session?.picture} />
+              <AvatarImage
+                src={
+                  session?.picture ??
+                  `https://source.boringavatars.com/beam/25/${session.publickey}`
+                }
+              />
               <AvatarFallback className="text-primary-foreground bg-primary rounded-[var(--radius)]">
                 {/* TODO: If there is no name generate random avatar */}
                 {session.name?.substring(0, 2)}
@@ -220,10 +226,12 @@ function AccountSection({ session }: { session: Profile | null }) {
     <>
       {session ? (
         <div>
-          <DropdownMenuLabel className="truncate">
-            <div>
+          <DropdownMenuLabel>
+            <div className="truncate">
               <span className="mr-2">👋</span> Hi,{" "}
-              <b className="ml-2font-bold italic">{session.name}!</b>
+              <b className="ml-2font-bold italic">
+                {session.name ?? session.publickey}!
+              </b>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuGroup>
@@ -316,7 +324,7 @@ function MobileLinks({ path }: { path: string }) {
             <span
               className={cn(
                 path === route.href &&
-                "underline underline-offset-4 decoration-2 decoration-brand",
+                  "underline underline-offset-4 decoration-2 decoration-brand",
               )}
             >
               {route.name}

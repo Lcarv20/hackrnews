@@ -45,10 +45,11 @@ export default function RootLayout({
           <Toaster
             toastOptions={{
               classNames: {
-                error: "bg-destructive text-destructive-foreground",
-                success: "bg-success text-success-foreground",
-                warning: "bg-warn text-warn-foreground",
-                info: "bg-info text-info-foreground",
+                error:
+                  "bg-destructive text-destructive-foreground border-destructive",
+                success: "bg-success text-success-foreground border-success",
+                warning: "bg-warn text-warn-foreground border-warn",
+                info: "bg-info text-info-foreground border-info",
               },
             }}
           />

@@ -2,7 +2,7 @@ import { JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { InvalidSessionError } from "./exceptions";
-import { getTokenExpiration } from "./misc";
+import { generateTokenExp } from "./misc";
 import { Profile } from "./nostr";
 
 export function getJwtSecretKey() {
@@ -23,12 +23,13 @@ type Payload = JWTPayload & {
 };
 
 export async function setSession(user: Profile | null, rememberMe = false) {
+  "use server";
   if (!user) {
     cookies().delete("session");
     return;
   }
 
-  const expires = getTokenExpiration(rememberMe);
+  const expires = generateTokenExp(rememberMe);
   const value = await encode({ profile: user, expires, rememberMe });
   cookies().set({
     name: "session",
@@ -40,6 +41,8 @@ export async function setSession(user: Profile | null, rememberMe = false) {
 }
 
 export async function getSession(): Promise<Profile | null> {
+  "use server";
+
   const session = cookies().get("session");
   if (!session?.value) return null;
   try {
@@ -53,13 +56,15 @@ export async function getSession(): Promise<Profile | null> {
 }
 
 export async function updateSession(request: NextRequest) {
+  "use server";
+
   const session = request.cookies.get("session")?.value;
   if (!session) return;
 
   const res = NextResponse.next();
   try {
     let parsed = (await decode(session)) as Payload;
-    parsed.expires = getTokenExpiration(parsed.rememberMe);
+    parsed.expires = generateTokenExp(parsed.rememberMe);
 
     res.cookies.set({
       name: "session",
@@ -68,6 +73,7 @@ export async function updateSession(request: NextRequest) {
       httpOnly: true,
       path: "/",
     });
+
     return res;
   } catch (e) {
     // TODO: log error to some system
@@ -81,11 +87,11 @@ async function encode(payload: Payload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime(getTokenExpiration(payload.rememberMe))
+    .setExpirationTime(generateTokenExp(payload.rememberMe))
     .sign(getJwtSecretKey());
 }
 
-export async function decode(token: string) {
+async function decode(token: string) {
   try {
     const { payload } = await jwtVerify(token, getJwtSecretKey(), {
       algorithms: ["HS256"],

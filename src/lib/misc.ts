@@ -40,34 +40,9 @@ export function isMobile() {
   return window.matchMedia("(max-width: 1024px)").matches;
 }
 
-/** if it should block scroll or not
- * @param scroll - boolean
- */
-export function lockScroll(scroll: boolean) {
-  if (scroll) {
-    document.body.style.overflowY = "hidden";
-    document.body.addEventListener("touchmove", preventMobileScrollListener, {
-      passive: false,
-    });
-    return;
-  }
-  document.body.style.overflowY = "auto";
-  document.body.removeEventListener("touchmove", preventMobileScrollListener);
-}
-
-/**
- * Prevents mobile scrolling
- * @param e - touch event
- */
-export const preventMobileScrollListener = (e: TouchEvent) => {
-  e.preventDefault();
-};
-
 /**
  * Closes the drawer on screen size
  * @param stateToggler - function to toggle the state
- * @returns
- *
  */
 export function closeOnScreenSize(stateToggler: () => void) {
   const listener = () => {
@@ -87,7 +62,7 @@ export function closeOnScreenSize(stateToggler: () => void) {
  * @param rememberMe - boolean
  * @returns the expiration date
  */
-export function getTokenExpiration(rememberMe: boolean) {
+export function generateTokenExp(rememberMe: boolean) {
   const SESSION_DURATION = {
     short: 60 * 60 * 1000,
     long: 30 * 24 * 60 * 60 * 1000,
@@ -102,20 +77,18 @@ export function getTokenExpiration(rememberMe: boolean) {
 }
 
 /**
- * A basic class for converting URL protocols.
+ * @desc  Basic string operations on url protocol.
  */
-export class UrlProtocolUtils {
-  /**
-   * Protocol Regex. Has access to methods like .test()
-   */
-  private static hasProtocol = new RegExp(/^(http|https|ws|wss):\/\//); /**
+export namespace UrlProtocolUtils {
+  const hasProtocol = new RegExp(/^(http|https|ws|wss):\/\//);
 
+  /**
    * Converts a URL from HTTPS to HTTP or WSS to WS.
    * @param {string} url - The input URL string.
    * @return {string} The converted URL string.
    */
-  public static toHTTP(url: string): string {
-    if (this.hasProtocol.test(url)) {
+  export function toHTTP(url: string): string {
+    if (hasProtocol.test(url)) {
       return url.replace("wss://", "https://").replace("ws://", "http://");
     }
     return "https://" + url;
@@ -126,8 +99,8 @@ export class UrlProtocolUtils {
    * @param {string} url - The input URL string.
    * @return {string} The converted URL string.
    */
-  public static toWS(url: string): string {
-    if (this.hasProtocol.test(url)) {
+  export function toWS(url: string): string {
+    if (hasProtocol.test(url)) {
       return url.replace("https://", "wss://").replace("http://", "ws://");
     }
     return "wss://" + url;
@@ -138,7 +111,7 @@ export class UrlProtocolUtils {
    * @param {string} url - The input URL string.
    * @return {string} The converted URL string without the protocol.
    */
-  public static removeProtocol(url: string): string {
+  export function removeProtocol(url: string): string {
     return url
       .replace("ws://", "")
       .replace("wss://", "")
