@@ -2,6 +2,8 @@
 
 import { loginFormSchema } from "@/components/login/schemas";
 import { DEFAULT_SOURCE } from "@/lib/constants";
+import { InvalidSessionError } from "@/lib/exceptions";
+import { generateTokenExp } from "@/lib/misc";
 import { Profile } from "@/lib/nostr";
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
 import { revalidatePath } from "next/cache";
@@ -9,21 +11,19 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { kinds, Relay } from "nostr-tools";
 import { z } from "zod";
-import { InvalidSessionError } from "@/lib/exceptions";
-import { generateTokenExp } from "@/lib/misc";
 import { CookieStore } from "../entities";
 
-export async function login(
+export async function loginAction(
   publickey: string,
   data: z.infer<typeof loginFormSchema>,
 ) {
-  const source = data.source || DEFAULT_SOURCE;
+  const source = data.source?.value || DEFAULT_SOURCE;
   const eventData = await getProfile(publickey, source);
 
   const profile = new Profile(publickey, eventData);
   console.log(profile);
   await setSession(profile, data.rememberMe);
-  await setPreferedSource(data.source);
+  await setPreferedSourceAction(data.source?.value);
 }
 
 type GetProfileRes = Promise<{
@@ -77,7 +77,7 @@ async function getProfile(pk: string, source: string): GetProfileRes {
   });
 }
 
-export async function setPreferedSource(source: string) {
+async function setPreferedSourceAction(source: string | undefined) {
   if (!!!source) {
     cookies().delete(CookieStore.PreferedSource);
     return;
@@ -90,7 +90,8 @@ export async function setPreferedSource(source: string) {
     httpOnly: true,
   });
 }
-export async function logout() {
+
+export async function logoutAction() {
   try {
     await setSession(null);
     revalidatePath("/");
@@ -100,8 +101,7 @@ export async function logout() {
 }
 
 // SESSION
-
-export async function getJwtSecretKey() {
+async function getJwtSecretKey() {
   const secret = process.env.JWT_SECRET;
 
   if (!secret) {
@@ -118,7 +118,7 @@ type Payload = JWTPayload & {
   rememberMe: boolean;
 };
 
-export async function setSession(user: Profile | null, rememberMe = false) {
+async function setSession(user: Profile | null, rememberMe = false) {
   if (!user) {
     cookies().delete("session");
     return;
@@ -135,7 +135,7 @@ export async function setSession(user: Profile | null, rememberMe = false) {
   });
 }
 
-export async function getSession(): Promise<Profile | null> {
+async function getSession(): Promise<Profile | null> {
   const session = cookies().get("session");
   if (!session?.value) return null;
   try {
@@ -148,7 +148,7 @@ export async function getSession(): Promise<Profile | null> {
   }
 }
 
-export async function updateSession(request: NextRequest) {
+async function updateSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return;
 

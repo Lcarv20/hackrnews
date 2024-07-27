@@ -3,14 +3,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import Divider from "@/components/ui/divider";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,8 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { login } from "@/lib/actions/auth";
-import { setPreferedSource } from "@/lib/actions/preferences";
+import { loginAction } from "@/lib/actions/auth";
 import { DEFAULT_SOURCE } from "@/lib/constants";
 import {
   NostrAvailability,
@@ -27,27 +18,24 @@ import {
   useNostr,
 } from "@/lib/hooks/nostr-availability";
 import { UrlProtocolUtils } from "@/lib/misc";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BlocksIcon,
-  Check,
   CircleXIcon,
   InfoIcon,
-  RouterIcon,
   TriangleAlertIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { useForm, UseFormSetError } from "react-hook-form";
+import { Controller, useForm, UseFormSetError } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { RelayInput, relaySingleInputSchema } from "../relay-input";
 import { type Option } from "./";
 import { loginFormSchema } from "./schemas";
-import { useRouter } from "next/navigation";
 
 export default function ({
-  relays,
   preferedSource,
   isModal = false,
 }: {
@@ -55,14 +43,14 @@ export default function ({
   preferedSource?: string;
   isModal?: boolean;
 }) {
-  const [search, setSearch] = useState(preferedSource || "");
-  const [open, setOpen] = useState(false);
   const nostr = useNostr();
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const { register, handleSubmit, setError, formState, setValue } = useForm<
+  const { register, handleSubmit, setError, formState, control } = useForm<
     z.infer<typeof loginFormSchema>
-  >({ resolver: zodResolver(loginFormSchema) });
+  >({
+    resolver: zodResolver(loginFormSchema),
+  });
 
   return (
     <form
@@ -78,11 +66,11 @@ export default function ({
       className="flex flex-col gap-4"
     >
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between p-2 rounded bg-info/10">
+        <div className="flex items-center justify-between p-2 rounded-md bg-info/10">
           <Label htmlFor="source">Select profile information relay</Label>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" className="w-7 h-7 p-1.5 rounded-full">
+              <Button variant="ghost" animated className="w-7 h-7 p-1.5 rounded-full">
                 <InfoIcon className="text-info" />
               </Button>
             </PopoverTrigger>
@@ -103,72 +91,28 @@ export default function ({
           </Popover>
         </div>
 
-        {formState.errors.source && (
+        {formState.errors.source?.value && (
           <div className="bg-destructive/10 text-destructive-foreground flex items-center justify-between p-2 rounded">
-            <p>{formState.errors.source?.message}</p>
+            <p>{formState.errors.source?.value.message}</p>
             <CircleXIcon className="w-4 h-4 mr-1.5 text-destructive" />
           </div>
         )}
 
         <div className="relative h-12">
-          <Command
-            className={cn(
-              "rounded-lg border shadow-md absolute top-0 z-10 h-fit bg-background",
-              !open && "border-b-0",
-              formState.errors.source && "border-b border-destructive",
+          <Controller
+            control={control}
+            name="source"
+            defaultValue={
+              (preferedSource && {
+                value: preferedSource,
+                label: UrlProtocolUtils.removeProtocol(preferedSource),
+              }) ||
+              undefined
+            }
+            render={({ field }) => (
+              <RelayInput {...field} placeholder="wss://relay.example.xyz" />
             )}
-            onFocus={(_) => setOpen(true)}
-            onBlur={(_) => setOpen(false)}
-          >
-            <CommandInput
-              icon={<RouterIcon />}
-              onKeyDown={(e) => {
-                if (e.key === "Escape" || e.key === "Enter") {
-                  setOpen(false);
-                  e.currentTarget.blur();
-                }
-              }}
-              placeholder="wss://relay.example.xyz"
-              className="h-10"
-              onValueChange={(e) => {
-                setSearch(e);
-              }}
-              value={search}
-              {...register("source")}
-            />
-            <CommandList hidden={!open}>
-              <CommandEmpty onClick={(_) => setOpen(false)} className="p-1">
-                <div
-                  className={cn(
-                    "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none bg-accent text-accent-foreground",
-                  )}
-                >
-                  Connect to: {search}
-                </div>
-              </CommandEmpty>
-              <CommandGroup>
-                {relays.map((relay) => (
-                  <CommandItem
-                    key={relay.value}
-                    value={relay.value}
-                    onSelect={(currentValue) => {
-                      setSearch(currentValue === search ? "" : currentValue);
-                      setValue("source", currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        search === relay.value ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                    {relay.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
+          />
         </div>
       </div>
 
@@ -206,6 +150,7 @@ export default function ({
       </div>
 
       <Button
+        animated
         variant="brand"
         type="submit"
         className="w-full"
@@ -250,7 +195,7 @@ async function loginWithExtension(
   nostrService: NostrService,
   data: z.infer<typeof loginFormSchema>,
   setError: UseFormSetError<{
-    source: string;
+    source: z.infer<typeof relaySingleInputSchema>;
     rememberMe: boolean;
   }>,
 ) {
@@ -264,7 +209,7 @@ async function loginWithExtension(
     const publickey = await nostr?.getPublicKey();
     if (!publickey) throw new Error("No public key found!");
 
-    await login(publickey, data);
+    await loginAction(publickey, data);
     return true;
   } catch (error) {
     console.error(error);

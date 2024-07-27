@@ -1,7 +1,7 @@
 import Logo from "@/components/logo";
-import { DEFAULT_SOURCE, NOSTR_WATCH } from "@/lib/constants";
-import LoginForm from "./login-form";
+import { NOSTR_WATCH } from "@/lib/constants";
 import { cookies } from "next/headers";
+import LoginForm from "./login-form";
 
 export const revalidate = 3600; // revalidate at most every hour
 
@@ -10,7 +10,7 @@ export type Option = {
   readonly value: string;
 };
 
-export default async function Login({ isModal = false }: { isModal: boolean }) {
+export default async function Login({ isModal = false }) {
   const preferedSource = cookies().get("prefered-source")?.value;
   let relays: Option[] = [];
 

@@ -1,32 +1,16 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  HandHeart,
-  InfoIcon,
-  LaptopIcon,
-  MoonIcon,
-  StickyNoteIcon,
-  SunIcon,
-  UserIcon,
-  ZapIcon,
-} from "lucide-react";
-import React from "react";
-import { LogOut, Settings } from "lucide-react";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,25 +24,41 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/lib/actions/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useTheme } from "next-themes";
-import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
-  DialogHeader,
-  DialogFooter,
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { useReward } from "react-rewards";
-import { usePathname } from "next/navigation";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { logoutAction } from "@/lib/actions/auth";
 import { MENU_ROUTES } from "@/lib/constants";
 import { Profile } from "@/lib/nostr";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  HandHeart,
+  InfoIcon,
+  LaptopIcon,
+  LogOut,
+  MoonIcon,
+  Settings,
+  StickyNoteIcon,
+  SunIcon,
+  UserIcon,
+  ZapIcon,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useReward } from "react-rewards";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export default function OptionsMenu({ session }: { session: Profile | null }) {
   const path = usePathname();
@@ -80,20 +80,20 @@ export default function OptionsMenu({ session }: { session: Profile | null }) {
         >
           <ChevronDownIcon className="h-4 w-4" />
           {session ? (
-            <Avatar className="h-7 w-7 rounded-[var(--radius)]">
+            <Avatar className="h-7 w-7 rounded-md">
               <AvatarImage
                 src={
                   session?.picture ??
                   `https://source.boringavatars.com/beam/25/${session.publickey}`
                 }
               />
-              <AvatarFallback className="text-primary-foreground bg-primary rounded-[var(--radius)]">
+              <AvatarFallback className="text-primary-foreground bg-primary rounded-md">
                 {/* TODO: If there is no name generate random avatar */}
                 {session.name?.substring(0, 2)}
               </AvatarFallback>
             </Avatar>
           ) : (
-            <div className="rounded-[var(--radius)] bg-brand text-brand-foreground p-1 w-7 h-7">
+            <div className="rounded-md bg-brand text-brand-foreground p-1 w-7 h-7">
               <UserIcon className="h-5 w-5" />
             </div>
           )}
@@ -123,8 +123,8 @@ export default function OptionsMenu({ session }: { session: Profile | null }) {
           </DropdownMenuItem>
           {session && (
             <DropdownMenuItem
-              className="text-red-600 focus:bg-destructive/15 focus:text-red-600"
-              onClick={async () => await logout()}
+              className="text-red-600 focus:bg-destructive/10 focus:text-red-600 focus:border-destructive"
+              onClick={async () => await logoutAction()}
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>

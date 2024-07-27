@@ -1,8 +1,7 @@
 import { z } from "zod";
+import { relaySingleInputSchema } from "../relay-input";
 
 export const loginFormSchema = z.object({
-  source: z.string().refine((val) => val.length === 0 || val.length > 4, {
-    message: "Invalid relay.",
-  }),
+  source: relaySingleInputSchema.nullable().optional(),
   rememberMe: z.boolean(),
 });

@@ -11,8 +11,13 @@ export const DEFAULT_RELAYS = [["wss://relay.damus.io"], ["wss://nos.lol"]];
 
 export const pool = new SimplePool();
 
-export function parseRelays(relays: string[][]) {
-  return relays.map((relay) => relay[1]);
+export function parseRelays(relays: string[]) {
+  return relays?.map((relay) => {
+    return {
+      label: relay.replace("wss://", ""),
+      value: relay,
+    };
+  });
 }
 
 export class Profile implements User {
@@ -32,9 +37,9 @@ export class Profile implements User {
   constructor(
     pubkey: string,
     eventData: {
-      profile : NostrEvent | null,
-      relays : NostrEvent | null
-    }
+      profile: NostrEvent | null;
+      relays: NostrEvent | null;
+    },
   ) {
     const json = this.parseProfile(eventData.profile?.content);
     Object.assign(this, json);
@@ -52,24 +57,24 @@ export class Profile implements User {
     if (relayData && relayData.length > 0) {
       return relayData
         .filter((tag) => tag[0] === "r")
-        .map((tag) => [tag[1], tag[2]]);
+        .map((tag) => tag.slice(1));
     }
     return DEFAULT_RELAYS;
   }
 }
 
-export async function getRelayMetadata(relay: string) {
-  const relayMD = UrlProtocolUtils.toHTTP(relay);
-
-  try {
-    const req = await fetch(relayMD, {
-      headers: {
-        Accept: "application/nostr+json",
-      },
-    });
-    const json = await req.json();
-    console.log(json);
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export async function getRelayMetadata(relay: string) {
+//   const relayMetadata = UrlProtocolUtils.toHTTP(relay);
+//
+//   try {
+//     const req = await fetch(relayMetadata, {
+//       headers: {
+//         Accept: "application/nostr+json",
+//       },
+//     });
+//     const json = await req.json();
+//     console.log(json);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

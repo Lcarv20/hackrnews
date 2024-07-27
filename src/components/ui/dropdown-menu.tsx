@@ -27,8 +27,9 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent",
-      "[&_svg]:focus:rotate-12 [&_svg]:transition [&_svg]:transform [&_svg]:focus:scale-110",
+      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none border border-transparent",
+      "focus:bg-brand/20 data-[state=open]:bg-brand/20 focus:border-brand data-[state=open]:border-brand",
+      "[&_svg]:transition [&_svg]:focus:scale-125",
       inset && "pl-8",
       className,
     )}
@@ -84,8 +85,10 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-brand/15 focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "[&_svg]:focus:rotate-12 [&_svg]:transition [&_svg]:transform [&_svg]:focus:scale-110",
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors border border-transparent",
+      "focus:bg-brand/20 focus:border-brand focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      // "[&_svg]:focus:-rotate-12 [&_svg]:transition [&_svg]:transform [&_svg]:focus:scale-110",
+      "[&_svg]:transition [&_svg]:focus:scale-125",
       inset && "pl-8",
       className,
     )}
