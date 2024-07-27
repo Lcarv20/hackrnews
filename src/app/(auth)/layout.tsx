@@ -8,9 +8,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='h-full'>
+    <div className="h-full">
       <Link href="/">
-        <Button variant="secondary" >
+        <Button variant="secondary">
           <HomeIcon className="w-5 h-5" />
         </Button>
       </Link>

@@ -15,7 +15,8 @@ export default function Pill(props: PillProps) {
         props.variant === "primary"
           ? "bg-primary text-surface1"
           : "bg-surface1 text-primary",
-        props.variant === "primary" && "active:bg-background active:text-primary",
+        props.variant === "primary" &&
+          "active:bg-background active:text-primary",
         "active:bg-primary/20 transition-colors duration-75",
       )}
     >

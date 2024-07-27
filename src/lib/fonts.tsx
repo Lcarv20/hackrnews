@@ -9,9 +9,9 @@ import {
 } from "next/font/google";
 
 export const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-})
+  subsets: ["latin"],
+  display: "swap",
+});
 
 // logo
 export const tourney = Tourney({
@@ -51,4 +51,4 @@ export const outfit = Outfit({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-outfit",
-})
+});

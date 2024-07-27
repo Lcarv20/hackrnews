@@ -14,8 +14,8 @@ type DrawerProps = Omit<
   "children"
 > & {
   children:
-  | React.ReactNode
-  | (({ isOpen, setIsOpen }: DrawerState) => React.ReactNode);
+    | React.ReactNode
+    | (({ isOpen, setIsOpen }: DrawerState) => React.ReactNode);
 };
 
 /**

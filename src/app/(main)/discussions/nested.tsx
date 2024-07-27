@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Drawer from "@/ui/drawer";
 
 export default function NestedDrawer() {

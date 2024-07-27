@@ -24,7 +24,7 @@ const DialogContext = React.createContext<{
   setOpenCx: StateActionCtx;
 }>({
   openCx: false,
-  setOpenCx: () => { },
+  setOpenCx: () => {},
 });
 
 function Popover({ children, render, ...props }: PopoverProps) {

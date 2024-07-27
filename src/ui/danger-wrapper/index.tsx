@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export default function DangerWrapper({
   children,
   outerClasses,
-  innerClasses
+  innerClasses,
 }: {
   children: React.ReactNode;
   outerClasses?: string;

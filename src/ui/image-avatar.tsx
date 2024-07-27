@@ -20,7 +20,7 @@ export default function ImageAvatar(props: ImageAvatarProps) {
       alt={props.alt}
       onError={() => {
         console.error("failed to load image", props.src);
-        setHasError(true)
+        setHasError(true);
       }}
       width={50}
       height={50}

@@ -9,7 +9,7 @@ import React from "react";
 
 type Props = {
   className?: string;
-} & Partial<DotLottieCommonPlayer>
+} & Partial<DotLottieCommonPlayer>;
 
 export type ExtendedRef = {
   animateCheckOnClick: () => void;
@@ -21,26 +21,22 @@ const CheckAnimation = React.forwardRef(function CheckAnimation(
 ) {
   const animationRef = React.useRef<ExtendedRef | null>(null);
 
-  React.useImperativeHandle(
-    ref,
-    () => {
-      return {
-        animateCheckOnClick() {
-          const animationStatus = animationRef.current?.getState();
+  React.useImperativeHandle(ref, () => {
+    return {
+      animateCheckOnClick() {
+        const animationStatus = animationRef.current?.getState();
 
-          if (
-            animationStatus?.currentState === "playing" ||
-            animationStatus?.currentState === "completed"
-          ) {
-            animationRef.current?.stop();
-            animationRef.current?.play();
-          }
+        if (
+          animationStatus?.currentState === "playing" ||
+          animationStatus?.currentState === "completed"
+        ) {
+          animationRef.current?.stop();
           animationRef.current?.play();
-        },
-      };
-    },
-    [],
-  );
+        }
+        animationRef.current?.play();
+      },
+    };
+  }, []);
 
   return (
     <DotLottiePlayer

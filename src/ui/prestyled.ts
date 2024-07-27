@@ -7,4 +7,3 @@ export const floatClasses = twJoin(
   "data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade",
   "data-[side=left]:animate-slideRightAndFade",
 );
-

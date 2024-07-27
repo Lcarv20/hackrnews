@@ -1,12 +1,10 @@
 "use client";
 
-import { Button } from "@/ui/buttons";
-import { ROUTES } from "@/lib/routes";
+import { buttonVariants } from "@/components/ui/button";
+import { MENU_ROUTES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { MENU_ROUTES } from "@/lib/constants";
 
 export default function MenuLinks() {
   const pathname = usePathname();
@@ -29,7 +27,7 @@ export default function MenuLinks() {
           <span
             className={cn(
               pathname === route.href &&
-              "underline underline-offset-4 decoration-2 decoration-brand",
+                "underline underline-offset-4 decoration-2 decoration-brand",
             )}
           >
             {route.name}

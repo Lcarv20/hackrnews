@@ -70,7 +70,11 @@ export default function ({
           <Label htmlFor="source">Select profile information relay</Label>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" animated className="w-7 h-7 p-1.5 rounded-full">
+              <Button
+                variant="ghost"
+                animated
+                className="w-7 h-7 p-1.5 rounded-full"
+              >
                 <InfoIcon className="text-info" />
               </Button>
             </PopoverTrigger>

@@ -1,5 +1,5 @@
 import React from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import { ArticleCardProps } from "..";
 
 export default function Author(props: ArticleCardProps) {
